@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Flutter",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart"
+      },
+      {
+        "name": "Flutter (iOS Simulator)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "deviceId": "iOS Simulator"
+      },
+      {
+        "name": "Flutter (Real iOS Device)",
+        "request": "launch",
+        "type": "dart",
+        "program": "lib/main.dart",
+        "deviceId": "b3c8c9f16ce0842c7bd87e5378cb12e264b0561b"  
+      }
+    ]
+  }
