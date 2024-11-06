@@ -32,8 +32,7 @@ class _NavBarState extends State<NavBar> {
       initialPage: int.parse(widget.currentIndex),
     );
 
-    // TODO: Fetch login status from your server or stored preferences.
-    // Example:
+    // Fetch login status from your server or stored preferences.
     // isLoggedIn = await fetchLoginStatus(); // Set this based on actual login status
   }
 

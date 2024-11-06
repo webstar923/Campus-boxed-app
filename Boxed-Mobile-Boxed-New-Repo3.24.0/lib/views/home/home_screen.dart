@@ -13,7 +13,7 @@ import 'package:boxed_project/theme/font_structures.dart';
 import 'package:boxed_project/theme/spacing.dart';
 import 'package:boxed_project/widgets/filled_box.dart';
 import 'package:boxed_project/widgets/image_slider.dart';
-
+import 'package:boxed_project/views/home/widget/schools_we_serve.dart'; // Schools We Server Wedget.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -140,8 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       // fillForms(size),
                       setReminderWidget(),
                       howWeWork(),
-                      letsTrack(),
-                      letsTrackFroms()
+                      SchoolsWeServeWidget(),
+                      // letsTrack(),
+                      // letsTrackFroms()
                     ],
                   ),
                 ),
@@ -160,20 +161,20 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ImageSlider(
-            leftMargin: 10,
-            rightMargin: 10,
-            borderRadius: 14,
+            leftMargin: 5,
+            rightMargin: 5,
+            borderRadius: 7,
             images: const [
-              'assets/images/banner-1.png',
-              'assets/images/banner-1.png',
-              'assets/images/banner-1.png',
+              'assets/images/banner1.png',
+              'assets/images/banner2.png',
+              'assets/images/banner3.png',
             ],
-            height: size.height / 100 * 45,
+            height: size.height / 100 * 50,
             // image size error issue
             isNetworkImage: false,
             useShadow: false,
             isShowIndicator: true,
-            indicatorPositionBottom: -18,
+            indicatorPositionBottom: -180,
           ),
           // Center(
           //   child: FilledBox(
@@ -426,277 +427,277 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget letsTrack() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Text(
-            "Let’s Track Your Package",
-            style: TextStyle(
-              fontSize: largefontsize5,
-              fontWeight: boldfontweight,
-              color: themewhitecolor,
-            ),
-          ),
-        ),
-        15.kH,
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: CustomTextField(
-            filled: true,
-            fillColor: themewhitecolor,
-            textInputType: TextInputType.text,
-            hintText: "Enter your tracking number",
-            isOutlinedInputBorder: true,
-            enabledBorderColor: themegreycolor,
-            focusedBorderColor: Palette.themecolor,
-            borderWidth: 1.5,
-            prefix: Icon(
-              Icons.search,
-              color: themegreytextcolor,
-              size: 20,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget letsTrack() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 15),
+  //         child: Text(
+  //           "Let’s Track Your Package",
+  //           style: TextStyle(
+  //             fontSize: largefontsize5,
+  //             fontWeight: boldfontweight,
+  //             color: themewhitecolor,
+  //           ),
+  //         ),
+  //       ),
+  //       15.kH,
+  //       const Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 15),
+  //         child: CustomTextField(
+  //           filled: true,
+  //           fillColor: themewhitecolor,
+  //           textInputType: TextInputType.text,
+  //           hintText: "Enter your tracking number",
+  //           isOutlinedInputBorder: true,
+  //           enabledBorderColor: themegreycolor,
+  //           focusedBorderColor: Palette.themecolor,
+  //           borderWidth: 1.5,
+  //           prefix: Icon(
+  //             Icons.search,
+  //             color: themegreytextcolor,
+  //             size: 20,
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Widget letsTrackFroms() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Full Name",
-            style: TextStyle(
-              fontSize: mediumfontsize1,
-              color: themeblackcolor,
-              fontWeight: boldfontweightvar1,
-            ),
-          ),
-          5.kH,
-          const CustomTextField(
-            textInputType: TextInputType.text,
-            hintText: "Enter Full Name",
-            isOutlinedInputBorder: true,
-            filled: true,
-            fillColor: themetextfieldcolor,
-            focusedBorderColor: Palette.themecolor,
-            borderWidth: 1.5,
-          ),
-          15.kH,
-          const Text(
-            "Are you a Student or Parent/Family Member",
-            style: TextStyle(
-              fontSize: mediumfontsize1,
-              color: themeblackcolor,
-              fontWeight: boldfontweightvar1,
-            ),
-          ),
-          15.kH,
-          Row(
-            children: [
-              SizedBox(
-                width: 130,
-                child: CheckboxListTile(
-                  activeColor: Palette.themecolor,
-                  contentPadding: EdgeInsets.zero,
-                  checkboxShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  value: check,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      check = value;
-                    });
-                  },
-                  title: const Text(
-                    "Student",
-                    style: TextStyle(
-                      fontSize: mediumfontsize5,
-                      color: themegreytextcolor,
-                      fontWeight: normalfontweightvar1,
-                    ),
-                  ),
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-              ),
-              10.kW,
-              SizedBox(
-                width: 250,
-                child: CheckboxListTile(
-                  activeColor: Palette.themecolor,
-                  contentPadding: EdgeInsets.zero,
-                  checkboxShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  value: check1,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      check1 = value;
-                    });
-                  },
-                  title: const Text(
-                    "Parent/ Family Member",
-                    style: TextStyle(
-                      fontSize: mediumfontsize5,
-                      color: themegreytextcolor,
-                      fontWeight: normalfontweightvar1,
-                    ),
-                  ),
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-              ),
-            ],
-          ),
-          20.kH,
-          const Text(
-            "Student Email",
-            style: TextStyle(
-              fontSize: mediumfontsize1,
-              color: themeblackcolor,
-              fontWeight: boldfontweightvar1,
-            ),
-          ),
-          5.kH,
-          const CustomTextField(
-            textInputType: TextInputType.text,
-            hintText: "Email Address",
-            isOutlinedInputBorder: true,
-            filled: true,
-            fillColor: themetextfieldcolor,
-            focusedBorderColor: Palette.themecolor,
-            borderWidth: 1.5,
-          ),
-          20.kH,
-          const Text(
-            "Parent/Family Member Email",
-            style: TextStyle(
-              fontSize: mediumfontsize1,
-              color: themeblackcolor,
-              fontWeight: boldfontweightvar1,
-            ),
-          ),
-          5.kH,
-          const CustomTextField(
-            textInputType: TextInputType.text,
-            hintText: "Email Address",
-            isOutlinedInputBorder: true,
-            filled: true,
-            fillColor: themetextfieldcolor,
-            focusedBorderColor: Palette.themecolor,
-            borderWidth: 1.5,
-          ),
-          15.kH,
-          const Text(
-            "Are You An?",
-            style: TextStyle(
-              fontSize: mediumfontsize1,
-              color: themeblackcolor,
-              fontWeight: boldfontweightvar1,
-            ),
-          ),
-          5.kH,
-          CustomDropDown(
-            hint: 'Select',
-            errorText: '',
-            value: selectSchool,
-            items: [
-              const DropdownMenuItem(
-                value: 0,
-                child: Text('Type 1'),
-              ),
-              const DropdownMenuItem(
-                value: 1,
-                child: Text('Type 2'),
-              ),
-            ].cast<DropdownMenuItem<int>>(),
-            onChanged: (value) {
-              setState(() {
-                selectSchool = value;
-              });
-            },
-          ),
-          15.kH,
-          const Text(
-            "Do You Live In?",
-            style: TextStyle(
-              fontSize: mediumfontsize1,
-              color: themeblackcolor,
-              fontWeight: boldfontweightvar1,
-            ),
-          ),
-          5.kH,
-          CustomDropDown(
-            hint: 'Select',
-            errorText: '',
-            value: selectPayment,
-            items: [
-              const DropdownMenuItem(
-                value: 0,
-                child: Text('Type 1'),
-              ),
-              const DropdownMenuItem(
-                value: 1,
-                child: Text('Type 2'),
-              ),
-            ].cast<DropdownMenuItem<int>>(),
-            onChanged: (value) {
-              setState(() {
-                selectPayment = value;
-              });
-            },
-          ),
-          15.kH,
-          const Text(
-            "Expected Graduation Year?",
-            style: TextStyle(
-              fontSize: mediumfontsize1,
-              color: themeblackcolor,
-              fontWeight: boldfontweightvar1,
-            ),
-          ),
-          5.kH,
-          CustomDropDown(
-            hint: 'Select',
-            errorText: '',
-            value: selectPayment,
-            items: [
-              const DropdownMenuItem(
-                value: 0,
-                child: Text('Type 1'),
-              ),
-              const DropdownMenuItem(
-                value: 1,
-                child: Text('Type 2'),
-              ),
-            ].cast<DropdownMenuItem<int>>(),
-            onChanged: (value) {
-              setState(() {
-                selectPayment = value;
-              });
-            },
-          ),
-          20.kH,
-          CustomButton(
-            onTap: () {},
-            height: 55,
-            borderRadius: BorderRadius.circular(10),
-            child: const Text(
-              "Reserve",
-              style: TextStyle(
-                color: themewhitecolor,
-                fontSize: mediumfontsize3,
-                fontWeight: boldfontweight,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget letsTrackFroms() {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         const Text(
+  //           "Full Name",
+  //           style: TextStyle(
+  //             fontSize: mediumfontsize1,
+  //             color: themeblackcolor,
+  //             fontWeight: boldfontweightvar1,
+  //           ),
+  //         ),
+  //         5.kH,
+  //         const CustomTextField(
+  //           textInputType: TextInputType.text,
+  //           hintText: "Enter Full Name",
+  //           isOutlinedInputBorder: true,
+  //           filled: true,
+  //           fillColor: themetextfieldcolor,
+  //           focusedBorderColor: Palette.themecolor,
+  //           borderWidth: 1.5,
+  //         ),
+  //         15.kH,
+  //         const Text(
+  //           "Are you a Student or Parent/Family Member",
+  //           style: TextStyle(
+  //             fontSize: mediumfontsize1,
+  //             color: themeblackcolor,
+  //             fontWeight: boldfontweightvar1,
+  //           ),
+  //         ),
+  //         15.kH,
+  //         Row(
+  //           children: [
+  //             SizedBox(
+  //               width: 130,
+  //               child: CheckboxListTile(
+  //                 activeColor: Palette.themecolor,
+  //                 contentPadding: EdgeInsets.zero,
+  //                 checkboxShape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.circular(12),
+  //                 ),
+  //                 value: check,
+  //                 onChanged: (bool? value) {
+  //                   setState(() {
+  //                     check = value;
+  //                   });
+  //                 },
+  //                 title: const Text(
+  //                   "Student",
+  //                   style: TextStyle(
+  //                     fontSize: mediumfontsize5,
+  //                     color: themegreytextcolor,
+  //                     fontWeight: normalfontweightvar1,
+  //                   ),
+  //                 ),
+  //                 controlAffinity: ListTileControlAffinity.leading,
+  //               ),
+  //             ),
+  //             10.kW,
+  //             SizedBox(
+  //               width: 250,
+  //               child: CheckboxListTile(
+  //                 activeColor: Palette.themecolor,
+  //                 contentPadding: EdgeInsets.zero,
+  //                 checkboxShape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.circular(12),
+  //                 ),
+  //                 value: check1,
+  //                 onChanged: (bool? value) {
+  //                   setState(() {
+  //                     check1 = value;
+  //                   });
+  //                 },
+  //                 title: const Text(
+  //                   "Parent/ Family Member",
+  //                   style: TextStyle(
+  //                     fontSize: mediumfontsize5,
+  //                     color: themegreytextcolor,
+  //                     fontWeight: normalfontweightvar1,
+  //                   ),
+  //                 ),
+  //                 controlAffinity: ListTileControlAffinity.leading,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         20.kH,
+  //         const Text(
+  //           "Student Email",
+  //           style: TextStyle(
+  //             fontSize: mediumfontsize1,
+  //             color: themeblackcolor,
+  //             fontWeight: boldfontweightvar1,
+  //           ),
+  //         ),
+  //         5.kH,
+  //         const CustomTextField(
+  //           textInputType: TextInputType.text,
+  //           hintText: "Email Address",
+  //           isOutlinedInputBorder: true,
+  //           filled: true,
+  //           fillColor: themetextfieldcolor,
+  //           focusedBorderColor: Palette.themecolor,
+  //           borderWidth: 1.5,
+  //         ),
+  //         20.kH,
+  //         const Text(
+  //           "Parent/Family Member Email",
+  //           style: TextStyle(
+  //             fontSize: mediumfontsize1,
+  //             color: themeblackcolor,
+  //             fontWeight: boldfontweightvar1,
+  //           ),
+  //         ),
+  //         5.kH,
+  //         const CustomTextField(
+  //           textInputType: TextInputType.text,
+  //           hintText: "Email Address",
+  //           isOutlinedInputBorder: true,
+  //           filled: true,
+  //           fillColor: themetextfieldcolor,
+  //           focusedBorderColor: Palette.themecolor,
+  //           borderWidth: 1.5,
+  //         ),
+  //         15.kH,
+  //         const Text(
+  //           "Are You An?",
+  //           style: TextStyle(
+  //             fontSize: mediumfontsize1,
+  //             color: themeblackcolor,
+  //             fontWeight: boldfontweightvar1,
+  //           ),
+  //         ),
+  //         5.kH,
+  //         CustomDropDown(
+  //           hint: 'Select',
+  //           errorText: '',
+  //           value: selectSchool,
+  //           items: [
+  //             const DropdownMenuItem(
+  //               value: 0,
+  //               child: Text('Type 1'),
+  //             ),
+  //             const DropdownMenuItem(
+  //               value: 1,
+  //               child: Text('Type 2'),
+  //             ),
+  //           ].cast<DropdownMenuItem<int>>(),
+  //           onChanged: (value) {
+  //             setState(() {
+  //               selectSchool = value;
+  //             });
+  //           },
+  //         ),
+  //         15.kH,
+  //         const Text(
+  //           "Do You Live In?",
+  //           style: TextStyle(
+  //             fontSize: mediumfontsize1,
+  //             color: themeblackcolor,
+  //             fontWeight: boldfontweightvar1,
+  //           ),
+  //         ),
+  //         5.kH,
+  //         CustomDropDown(
+  //           hint: 'Select',
+  //           errorText: '',
+  //           value: selectPayment,
+  //           items: [
+  //             const DropdownMenuItem(
+  //               value: 0,
+  //               child: Text('Type 1'),
+  //             ),
+  //             const DropdownMenuItem(
+  //               value: 1,
+  //               child: Text('Type 2'),
+  //             ),
+  //           ].cast<DropdownMenuItem<int>>(),
+  //           onChanged: (value) {
+  //             setState(() {
+  //               selectPayment = value;
+  //             });
+  //           },
+  //         ),
+  //         15.kH,
+  //         const Text(
+  //           "Expected Graduation Year?",
+  //           style: TextStyle(
+  //             fontSize: mediumfontsize1,
+  //             color: themeblackcolor,
+  //             fontWeight: boldfontweightvar1,
+  //           ),
+  //         ),
+  //         5.kH,
+  //         CustomDropDown(
+  //           hint: 'Select',
+  //           errorText: '',
+  //           value: selectPayment,
+  //           items: [
+  //             const DropdownMenuItem(
+  //               value: 0,
+  //               child: Text('Type 1'),
+  //             ),
+  //             const DropdownMenuItem(
+  //               value: 1,
+  //               child: Text('Type 2'),
+  //             ),
+  //           ].cast<DropdownMenuItem<int>>(),
+  //           onChanged: (value) {
+  //             setState(() {
+  //               selectPayment = value;
+  //             });
+  //           },
+  //         ),
+  //         20.kH,
+  //         CustomButton(
+  //           onTap: () {},
+  //           height: 55,
+  //           borderRadius: BorderRadius.circular(10),
+  //           child: const Text(
+  //             "Reserve",
+  //             style: TextStyle(
+  //               color: themewhitecolor,
+  //               fontSize: mediumfontsize3,
+  //               fontWeight: boldfontweight,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
