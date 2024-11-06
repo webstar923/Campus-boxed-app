@@ -26,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool? check1 = false;
   int selectSchool = 0;
   int selectPayment = 0;
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -136,7 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       // fillForms(size),
+                      setReminderWidget(),
                       howWeWork(),
+                      letsTrack(),
+                      letsTrackFroms()
                     ],
                   ),
                 ),
@@ -209,18 +214,128 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // "Set a Reminder" widget
+  Widget setReminderWidget() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Center(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(1), // Border radius of 1
+            border: Border.all(
+              color: Palette.themecolor, // Border color
+              width: 1, // Border width
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Heading Text
+                const Text(
+                  "Set a Reminder!",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                // Description Text
+                const Text(
+                  "We will remind you to sign up for summer storage",
+                  style: TextStyle(fontSize: 17, 
+                  color: Colors.grey,
+                  fontWeight:normalfontweightvar2,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                // Phone Number Input
+                SizedBox(
+                  width: double.infinity,
+                  child: TextField(
+                    controller: _phoneController,
+                    decoration: const InputDecoration(
+                      labelText: "Phone Number",
+                      hintText: "Enter your phone number",
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.phone,
+                    style: const TextStyle(
+                        fontWeight: normalfontweightvar1, // Set font weight to normal
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                // Email Input
+                SizedBox(
+                  width: double.infinity,
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: "Email",
+                      hintText: "Enter your email",
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    style: const TextStyle(
+                        fontWeight: normalfontweightvar1, // Set font weight to normal
+                    ), 
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // "Remind Me" Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add reminder functionality here
+                      print("Reminder set for ${_phoneController.text}, ${_emailController.text}");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      backgroundColor: Palette.themecolor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // Small border radius for the button
+                      ),
+                    ),
+                    child: const Text(
+                      "Remind Me",
+                      style: TextStyle(
+                        fontSize: 20, // Text size
+                        color: Colors.white, // Text color
+                        fontWeight: boldfontweight, // Regular font style
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget howWeWork() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            "How We Work",
-            style: TextStyle(
-              fontSize: largefontsize5,
-              fontWeight: boldfontweight,
-              color: Palette.themecolor,
+        Align(
+          alignment: Alignment.center,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              "How We Work",
+              style: TextStyle(
+                fontSize: largefontsize5,
+                fontWeight: boldfontweight,
+                color: Palette.themecolor,
+              ),
             ),
           ),
         ),
@@ -233,12 +348,12 @@ class _HomeScreenState extends State<HomeScreen> {
           itemBuilder: (context, index) {
             return ReserveCard(
               image: index == 0
-                  ? "assets/images/reserve1.png"
+                  ? "assets/images/reserve-your-spot.png"
                   : index == 1
-                      ? "assets/images/reserve2.png"
+                      ? "assets/images/pack-your-item.png"
                       : index == 2
-                          ? "assets/images/reserve3.png"
-                          : "assets/images/reserve4.png",
+                          ? "assets/images/cart.png"
+                          : "assets/images/contact.png",
               title: index == 0
                   ? "Reserve your Spot"
                   : index == 1
