@@ -6,7 +6,6 @@ import 'package:boxed_project/theme/colors.dart';
 import 'package:boxed_project/views/home/home_screen.dart';
 import 'package:boxed_project/widgets/custom_icon_button.dart';
 
-// ignore: must_be_immutable
 class NavBar extends StatefulWidget {
   String currentIndex;
   final int indexCategory;
@@ -22,12 +21,20 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   late PageController pageController;
+  
+  // Boolean to track login status. Initialize it according to your app’s login logic.
+  bool isLoggedIn = false;
+
   @override
   void initState() {
     super.initState();
     pageController = PageController(
       initialPage: int.parse(widget.currentIndex),
     );
+
+    // TODO: Fetch login status from your server or stored preferences.
+    // Example:
+    // isLoggedIn = await fetchLoginStatus(); // Set this based on actual login status
   }
 
   @override
@@ -50,34 +57,41 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CustomIconButton(
-              onTap: () {},
-              child: const CircleAvatar(
-                radius: 25,
-                backgroundColor: themegreycolor,
-                child: CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Palette.themecolor,
-                  child: Icon(
-                    CupertinoIcons.qrcode_viewfinder,
-                    color: themewhitecolor,
-                    size: 25,
+      
+      // Conditionally display the QR Code button only if the user is logged in.
+      floatingActionButton: isLoggedIn 
+          ? Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CustomIconButton(
+                    onTap: () {
+                      // Define the action for the QR Code button here
+                    },
+                    child: const CircleAvatar(
+                      radius: 25,
+                      backgroundColor: themegreycolor,
+                      child: CircleAvatar(
+                        radius: 22,
+                        backgroundColor: Palette.themecolor,
+                        child: Icon(
+                          CupertinoIcons.qrcode_viewfinder,
+                          color: themewhitecolor,
+                          size: 25,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const Text(
+                    "Scan\nan item",
+                    textAlign: TextAlign.center,
+                  )
+                ],
               ),
-            ),
-            const Text(
-              "Scan\nan item",
-              textAlign: TextAlign.center,
             )
-          ],
-        ),
-      ),
+          : null, // If not logged in, `floatingActionButton` is set to `null`
+      
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
@@ -102,23 +116,16 @@ class _NavBarState extends State<NavBar> {
                           Icons.home,
                           color: Palette.themecolor,
                         ),
-                        Text(
-                          "Home",
-                        ),
+                        Text("Home"),
                       ],
                     )
                   : const Column(
                       children: [
-                        Icon(
-                          Icons.home_outlined,
-                        ),
-                        Text(
-                          "Home",
-                        ),
+                        Icon(Icons.home_outlined),
+                        Text("Home"),
                       ],
                     ),
             ),
-            // label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Padding(
@@ -130,23 +137,16 @@ class _NavBarState extends State<NavBar> {
                           CupertinoIcons.bubble_middle_bottom_fill,
                           color: Palette.themecolor,
                         ),
-                        Text(
-                          "Chat",
-                        ),
+                        Text("Chat"),
                       ],
                     )
                   : const Column(
                       children: [
-                        Icon(
-                          CupertinoIcons.bubble_middle_bottom,
-                        ),
-                        Text(
-                          "Chat",
-                        ),
+                        Icon(CupertinoIcons.bubble_middle_bottom),
+                        Text("Chat"),
                       ],
                     ),
             ),
-            // label: 'Notifications',
           ),
           BottomNavigationBarItem(
             icon: Padding(
@@ -158,19 +158,13 @@ class _NavBarState extends State<NavBar> {
                           CupertinoIcons.bookmark_fill,
                           color: Palette.themecolor,
                         ),
-                        Text(
-                          "Pricing",
-                        ),
+                        Text("Pricing"),
                       ],
                     )
                   : const Column(
                       children: [
-                        Icon(
-                          CupertinoIcons.bookmark,
-                        ),
-                        Text(
-                          "Pricing",
-                        ),
+                        Icon(CupertinoIcons.bookmark),
+                        Text("Pricing"),
                       ],
                     ),
             ),
@@ -185,19 +179,13 @@ class _NavBarState extends State<NavBar> {
                           CupertinoIcons.person_crop_circle_fill,
                           color: Palette.themecolor,
                         ),
-                        Text(
-                          "Account",
-                        ),
+                        Text("Account"),
                       ],
                     )
                   : const Column(
                       children: [
-                        Icon(
-                          CupertinoIcons.person_crop_circle,
-                        ),
-                        Text(
-                          "Account",
-                        ),
+                        Icon(CupertinoIcons.person_crop_circle),
+                        Text("Account"),
                       ],
                     ),
             ),

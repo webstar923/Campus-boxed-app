@@ -48,11 +48,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       // "Get Started" button
                       CustomButton(
                         onTap: () {
-                          Go.named(
+                          Go.namedReplace(
                             context,
-                            RouteName.signupScreen,
+                            RouteName.navbar,
+                            params: {
+                              'currentIndex': "0",
+                            },
                           );
-                        },
+                        },   
                         height: 60,
                         buttoncolor: themewhitecolor,
                         child: const Text(

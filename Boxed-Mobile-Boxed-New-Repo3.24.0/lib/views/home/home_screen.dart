@@ -39,18 +39,49 @@ class _HomeScreenState extends State<HomeScreen> {
                   surfaceTintColor: Palette.themecolor,
                   backgroundColor: Palette.themecolor,
                   pinned: true,
-                  expandedHeight: 580,
+                  expandedHeight: 400,
                   elevation: 0,
-                  // shape: const RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.vertical(
-                  //     bottom: Radius.circular(25),
-                  //   ),
-                  // ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(10),
+                    ),
+                  ),
                   title: Image.asset(
                     Constants.splashLogo,
                     width: 200,
                   ),
                   actions: [
+                    // "Reserve Now" button to the right of the logo
+                    Padding(
+                      padding: const EdgeInsets.only(right: 25), // Right padding for spacing
+                      child: GestureDetector(
+                        onTap: () {
+                          // Navigate to the ReserveNow page when the button is pressed
+                          Go.route(
+                            context,
+                            const ReserveNow(),
+                          );
+                        },
+
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Button background color
+                            borderRadius: BorderRadius.circular(5), // Border radius of 5
+                            border: Border.all(color: Palette.themecolor), // Border color
+                          ),     
+
+                        child: const Text(
+                          "RESERVE NOW",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: boldfontweight,
+                            fontSize: 14
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                     CustomIconButton(
                       onTap: () {},
                       child: const Icon(
@@ -58,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: themewhitecolor,
                       ),
                     ),
-                    10.kW,
+                    10.kW, // Space after the notification icon
                   ],
                   flexibleSpace: FlexibleSpaceBar(
                     background: Column(
@@ -94,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+
           ];
         },
         body: SafeArea(
@@ -153,25 +185,25 @@ class _HomeScreenState extends State<HomeScreen> {
           //     ),
           //   ),
           // ),
-          30.kH,
-          CustomButton(
-            onTap: () {
-              Go.route(
-                context,
-                const ReserveNow(),
-              );
-            },
-            height: 60,
-            buttoncolor: themewhitecolor,
-            child: const Text(
-              "Reserve Now",
-              style: TextStyle(
-                fontSize: mediumfontsize1,
-                color: Palette.themecolor,
-                fontWeight: boldfontweight,
-              ),
-            ),
-          ),
+          // 30.kH,
+          // CustomButton(
+          //   onTap: () {
+          //     Go.route(
+          //       context,
+          //       const ReserveNow(),
+          //     );
+          //   },
+          //   height: 60,
+          //   buttoncolor: themewhitecolor,
+          //   child: const Text(
+          //     "Reserve Now",
+          //     style: TextStyle(
+          //       fontSize: mediumfontsize1,
+          //       color: Palette.themecolor,
+          //       fontWeight: boldfontweight,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
