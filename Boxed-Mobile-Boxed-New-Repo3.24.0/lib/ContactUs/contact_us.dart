@@ -39,7 +39,7 @@ class _ContactUsState extends State<ContactUs> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
                     child: Image.asset(
-                      'assets/images/boxedBoxLogo.png',
+                      'assets/images/boxed_logo.png',
                       height: 62,
                       width: 208,
                     ),

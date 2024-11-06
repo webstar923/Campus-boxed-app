@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: EdgeInsets.only(
                             top: MediaQuery.of(context).padding.top),
                         child: Image.asset(
-                          'assets/images/boxedBoxLogo.png',
+                          'assets/images/boxed_logo.png',
                           height: 67,
                           width: 212,
                         ),

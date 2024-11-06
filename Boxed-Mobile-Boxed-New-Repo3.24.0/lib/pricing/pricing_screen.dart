@@ -27,7 +27,7 @@ class _PricingScreenState extends State<PricingScreen> {
       'price': '\$30/Month',
       'description': 'Our "Boxed Boxes" are 18" x 18" x 18"',
       'imageUrl': 'assets/images/BoxedBox.png',
-      'additionalImageUrl': 'assets/images/boxedBoxLogo.png',
+      'additionalImageUrl': 'assets/images/boxed_logo.png',
     },
   ];
 
@@ -134,7 +134,7 @@ class _PricingScreenState extends State<PricingScreen> {
                     Row(
                       children: [
                         Image.asset(
-                          'assets/images/boxedBoxLogo.png',
+                          'assets/images/boxed_logo.png',
                           height: 44,
                           width: 137,
                         ),
@@ -444,7 +444,7 @@ class _PricingScreenState extends State<PricingScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Image.asset(
-                                'assets/images/boxedBoxLogo.png',
+                                'assets/images/boxed_logo.png',
                                 height: 25,
                                 width: 78,
                               ),

@@ -322,7 +322,7 @@ class Constant {
       'price': '\$30/Month',
       'description': 'Our "Boxed Boxes" are 18" x 18" x 18"',
       'imageUrl': 'assets/images/BoxedBox.png', // Large image
-      'additionalImageUrl': 'assets/images/boxedBoxLogo.png', // Small image
+      'additionalImageUrl': 'assets/images/boxed_logo.png', // Small image
     },
     // Add more items with images as needed
   ];

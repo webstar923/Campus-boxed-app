@@ -33,6 +33,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: Stack(
             alignment: Alignment.center,
             children: [
+              // Splash logo image in the center of the screen
               Image.asset(
                 Constants.splashLogo,
                 width: 350,
@@ -44,6 +45,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      // "Get Started" button
                       CustomButton(
                         onTap: () {
                           Go.named(
@@ -62,7 +64,35 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         ),
                       ),
+                      
+                      // Spacing between buttons
                       15.kH,
+                      
+                      // "Reserve My Storage!" button
+                      CustomButton(
+                        onTap: () {
+                          Go.named(
+                            context,
+                            RouteName.signupScreen,
+                            // RouteName.reserveStorageScreen,
+                          );
+                        },
+                        height: 60,
+                        buttoncolor: themewhitecolor,
+                        child: const Text(
+                          "Reserve My Storage!",
+                          style: TextStyle(
+                            fontSize: mediumfontsize1,
+                            color: Palette.themecolor,
+                            fontWeight: boldfontweight,
+                          ),
+                        ),
+                      ),
+                      
+                      // Spacing between buttons
+                      15.kH,
+                      
+                      // "Have an account? Login" button
                       CustomButton(
                         onTap: () {
                           Go.named(

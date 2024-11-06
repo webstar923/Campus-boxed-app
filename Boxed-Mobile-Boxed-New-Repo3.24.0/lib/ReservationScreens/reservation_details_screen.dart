@@ -85,7 +85,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, bottom: 15.0),
                   child: Image.asset(
-                    'assets/images/boxedBoxLogo.png',
+                    'assets/images/boxed_logo.png',
                     height: 67,
                     width: 212,
                   ),

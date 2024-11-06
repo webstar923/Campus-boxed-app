@@ -42,7 +42,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16.0, bottom: 14.0),
                     child: Image.asset(
-                      'assets/images/boxedBoxLogo.png',
+                      'assets/images/boxed_logo.png',
                       height: 67,
                       width: 212,
                     ),

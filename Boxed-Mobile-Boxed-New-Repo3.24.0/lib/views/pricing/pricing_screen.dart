@@ -140,7 +140,7 @@ class _PricingScreenState extends State<PricingScreen> {
                       child: Image.asset(
                         index == 0
                             ? "assets/images/college-cart.png"
-                            : "assets/images/boxedBoxLogo.png",
+                            : "assets/images/boxed_logo.png",
                         height: 80,
                         width: 80,
                       ),

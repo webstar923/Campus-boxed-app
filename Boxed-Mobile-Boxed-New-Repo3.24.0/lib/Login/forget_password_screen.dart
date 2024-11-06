@@ -89,7 +89,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         top: MediaQuery.of(context).padding.top),
                     child: Center(
                       child: Image.asset(
-                        'assets/images/boxedBoxLogo.png',
+                        'assets/images/boxed_logo.png',
                         height: 67,
                         width: 212,
                       ),

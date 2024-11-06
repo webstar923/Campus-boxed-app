@@ -41,7 +41,7 @@ class _GetStartScreenState extends State<GetStartScreen> {
         children: <Widget>[
           const Spacer(), 
           Image.asset(
-            'assets/images/boxedBoxLogo.png',
+            'assets/images/boxed_logo.png',
             height: 72,
             width: 236,
           ),
