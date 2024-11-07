@@ -52,17 +52,6 @@ class SchoolsWeServeWidget extends StatelessWidget {
           ),
         ),
         15.kH,        
-        
-        // Padding(
-        //   padding: const EdgeInsets.all(16.0),
-        //   child: Text(
-        //     'Schools We Serve',
-        //     style: TextStyle(
-        //       fontSize: 24,
-        //       fontWeight: FontWeight.bold,
-        //     ),
-        //   ),
-        // ),
 
         // Carousel with BackdropFilter
         CarouselSlider(

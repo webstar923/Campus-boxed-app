@@ -13,7 +13,11 @@ import 'package:boxed_project/theme/font_structures.dart';
 import 'package:boxed_project/theme/spacing.dart';
 import 'package:boxed_project/widgets/filled_box.dart';
 import 'package:boxed_project/widgets/image_slider.dart';
-import 'package:boxed_project/views/home/widget/schools_we_serve.dart'; // Schools We Server Wedget.
+import 'package:boxed_project/views/home/widget/schools_we_serve.dart'; // Schools We Server Widget.
+import 'package:boxed_project/views/home/widget/trusted_partner.dart'; // Trusted partner Widget
+import 'package:boxed_project/views/home/widget/servey.dart'; // Trusted partner Widget
+import 'package:boxed_project/views/home/widget/self_move.dart'; // Widget
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -127,7 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-
           ];
         },
         body: SafeArea(
@@ -141,6 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       setReminderWidget(),
                       howWeWork(),
                       SchoolsWeServeWidget(),
+                      TrustedPartner(),
+                      SelfMove(),
+                      Servey(),
+                      setReminderWidget(),
                       // letsTrack(),
                       // letsTrackFroms()
                     ],
@@ -376,53 +383,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         25.kH,
-        Center(
-          child: Column(
-            children: [
-              const Text(
-                "Do our Questionnaire for a",
-                style: TextStyle(
-                  fontSize: mediumfontsize1,
-                  color: Palette.themecolor,
-                  fontWeight: boldfontweight,
-                ),
-              ),
-              5.kH,
-              const Text(
-                "\$5 Amazon Gift Card!",
-                style: TextStyle(
-                  fontSize: largefontsize5,
-                  color: Palette.themecolor,
-                  fontWeight: boldfontweight,
-                ),
-              ),
-              10.kH,
-              CustomButton(
-                onTap: () {},
-                height: 45,
-                width: 200,
-                buttoncolor: Colors.transparent,
-                borderRadius: BorderRadius.circular(1),
-                border: Border.all(color: Palette.themecolor),
-                child: const Text(
-                  "Surveys",
-                  style: TextStyle(
-                    fontSize: mediumfontsize1,
-                    color: Palette.themecolor,
-                    fontWeight: boldfontweight,
-                  ),
-                ),
-              ),
-              15.kH,
-              Icon(
-                Icons.play_circle,
-                color: Palette.themecolor.withOpacity(0.7),
-                size: 50,
-              ),
-              15.kH,
-            ],
-          ),
-        ),
       ],
     );
   }

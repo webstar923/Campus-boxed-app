@@ -16,6 +16,7 @@ const double smallfontsize2 = 12;
 const double smallfontsize3 = 11;
 const double smallfontsize4 = 10;
 
+const FontWeight normalfontweightvar0 = FontWeight.normal;
 const FontWeight normalfontweightvar1 = FontWeight.w100;
 const FontWeight normalfontweightvar2 = FontWeight.w200;
 const FontWeight normalfontweightvar3 = FontWeight.w300;
