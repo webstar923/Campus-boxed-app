@@ -6,6 +6,7 @@ import 'package:boxed_project/views/navbar/nav_bar.dart';
 import 'package:boxed_project/views/splash/splash_screen.dart';
 import 'package:boxed_project/views/welcome/welcome_screen.dart';
 import 'package:boxed_project/widgets/error_screen.dart';
+import 'package:boxed_project/views/home/reserve_now.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,7 @@ class RouteName {
   static const String welcomeScreen = 'welcome';
   static const String loginScreen = 'login';
   static const String signupScreen = 'sign-up';
+  static const String reserveNowScreen = 'reservenow';  
   static const String forgotPasswordScreen = 'forgot-password';
   static const String navbar = 'nav-bar';
   static const String homeScreen = 'home';
@@ -92,6 +94,15 @@ class RouteName {
           );
         },
       ),
+      GoRoute(
+        path: '/$reserveNowScreen',
+        name: reserveNowScreen,
+        pageBuilder: (context, state) {
+          return const MaterialPage(
+            child: ReserveNow(),
+          );
+        },
+      ),      
       // GoRoute(
       //   path: '/$categorieScreen',
       //   name: categorieScreen,

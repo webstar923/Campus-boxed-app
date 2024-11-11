@@ -26,7 +26,7 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        $user['token'] = $user->createToken('Personal Access Token')->accessToken;
+        // $user['token'] = $user->createToken('Personal Access Token')->accessToken;
 
         return $this->success($user, "Logged in");
     }
@@ -34,7 +34,7 @@ class AuthController extends Controller
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
             'first_name' => 'sometimes',
-            'first_name' => 'sometimes',
+            'last_name' => 'sometimes',
             'phone_number' => 'sometimes',
             'role' => 'required|in:2,3',
             'email' => 'required|string|email|max:255|unique:users',
@@ -61,7 +61,7 @@ class AuthController extends Controller
         $user->customer_id = Str::orderedUuid();
         $user->save();
 
-        $user['token'] = $user->createToken('Personal Access Token')->accessToken;
+        // $user['token'] = $user->createToken('Personal Access Token')->accessToken;
 
         // registration payment
         $input = $request->toArray();

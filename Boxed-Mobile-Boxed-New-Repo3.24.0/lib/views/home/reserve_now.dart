@@ -9,6 +9,10 @@ import 'package:boxed_project/widgets/custom_text_field.dart';
 import 'package:boxed_project/widgets/filled_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:boxed_project/provider/auth_provider.dart';
+import 'package:boxed_project/route_structure/go_navigator.dart';
+import 'package:boxed_project/route_structure/go_router.dart';
 
 class ReserveNow extends StatefulWidget {
   const ReserveNow({super.key});
@@ -26,6 +30,21 @@ class _ReserveNowState extends State<ReserveNow> {
   int selectPayment = 0;
   @override
   Widget build(BuildContext context) {
+
+    bool isLoggedIn = Provider.of<AuthProvider>(context).isLoggedIn;
+    // Check if the user is logged in. If not, navigate to the login screen.
+    if (!isLoggedIn) {
+      // You can navigate to the login screen here
+      Future.delayed(Duration.zero, () {
+        Navigator.pushReplacementNamed(context, '/login');
+      });
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(

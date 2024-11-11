@@ -9,14 +9,6 @@ import 'package:boxed_project/Utility/constant.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
 import 'package:boxed_project/ReservationScreens/reservation_details_screen.dart';
 
-void main() {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-  ));
-  runApp(const MaterialApp(home: ReservationScreen()));
-}
-
 class ReservationScreen extends StatefulWidget {
   const ReservationScreen({super.key});
 

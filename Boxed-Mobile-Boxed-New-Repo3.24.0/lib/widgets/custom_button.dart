@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final BorderRadius? borderRadius;
   final BoxBorder? border;
   final Gradient? buttongradientColor;
+
   const CustomButton({
     Key? key,
     required this.child,

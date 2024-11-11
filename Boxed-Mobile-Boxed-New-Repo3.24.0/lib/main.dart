@@ -3,9 +3,17 @@ import 'package:boxed_project/theme/colors.dart';
 import 'package:boxed_project/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
+import 'package:provider/provider.dart';
+import 'package:boxed_project/provider/auth_provider.dart';
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -16,6 +16,8 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  bool isLoggedIn = false;
+  // isLoggedIn = await fetchLoginStatus(); // Set this based on actual login status
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,11 +76,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       // "Reserve My Storage!" button
                       CustomButton(
                         onTap: () {
-                          Go.named(
-                            context,
-                            RouteName.signupScreen,
-                            // RouteName.reserveStorageScreen,
-                          );
+                          if (isLoggedIn) {
+                            Go.named(
+                              context,
+                              RouteName.reserveNowScreen, // If logged in, go to ReserveNow screen
+                            );
+                          } else {
+                            Go.named(
+                              context,
+                              RouteName.loginScreen, // If not logged in, go to Signup screen
+                            );
+                          }
                         },
                         height: 60,
                         buttoncolor: themewhitecolor,

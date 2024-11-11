@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'assets/images/banner2.png',
               'assets/images/banner3.png',
             ],
-            height: size.height / 100 * 50,
+            height: size.height / 100 * 45,
             // image size error issue
             isNetworkImage: false,
             useShadow: false,
