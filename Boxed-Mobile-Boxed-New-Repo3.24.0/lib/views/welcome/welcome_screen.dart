@@ -7,6 +7,8 @@ import 'package:boxed_project/utils/constants.dart';
 import 'package:boxed_project/widgets/custom_button.dart';
 import 'package:boxed_project/widgets/filled_box.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:boxed_project/provider/auth_provider.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -16,10 +18,11 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  bool isLoggedIn = false;
   // isLoggedIn = await fetchLoginStatus(); // Set this based on actual login status
   @override
   Widget build(BuildContext context) {
+    
+    bool isLoggedIn = Provider.of<AuthProvider>(context).isLoggedIn;
     return Scaffold(
       body: SafeArea(
         child: FilledBox(

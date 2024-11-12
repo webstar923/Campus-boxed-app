@@ -35,7 +35,7 @@ class _ReserveNowState extends State<ReserveNow> {
     // Check if the user is logged in. If not, navigate to the login screen.
     if (!isLoggedIn) {
       // You can navigate to the login screen here
-      Future.delayed(Duration.zero, () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         Navigator.pushReplacementNamed(context, '/login');
       });
       return Scaffold(

@@ -14,7 +14,6 @@ import 'package:boxed_project/widgets/custom_text_button.dart';
 import 'package:boxed_project/widgets/custom_text_field.dart';
 import 'package:boxed_project/widgets/filled_box.dart';
 import 'package:flutter/gestures.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:provider/provider.dart';
 import 'package:boxed_project/provider/auth_provider.dart';
 
@@ -45,17 +44,21 @@ class _LoginScreenState extends State<LoginScreen> {
         password: passwordController.text,
       );
 
-      String responseMessage = await _loginController.loginUser(user);
-      setState(() {
-        _isLoading = false;
-        loginMessage = responseMessage;
-      });
-
-      if (responseMessage.contains('Login failed')){
-        showAnimatedWarningDialog(context, "Login unsuccessful. Try again or cancel.");
-      } else {
-        Provider.of<AuthProvider>(context, listen: false).login();
-        Go.named(context, RouteName.reserveNowScreen);
+      try {
+        UserModel? loggedInUser = await _loginController.loginUser(user);
+        setState(() {
+          _isLoading = false;
+        });
+        if (loggedInUser != null) {
+          Provider.of<AuthProvider>(context, listen: false).login(loggedInUser);
+          // Save the user data if needed in the AuthProvider or elsewhere
+          Go.named(context, RouteName.reserveNowScreen);
+        }
+      } catch (error) {
+        setState(() {
+          _isLoading = false;
+        });
+        showAnimatedWarningDialog(context, error.toString());
       }
     }
   }

@@ -1,6 +1,6 @@
 import 'package:boxed_project/route_structure/go_navigator.dart';
 import 'package:boxed_project/utils/constants.dart';
-import 'package:boxed_project/views/home/reserve_now.dart';
+import 'package:boxed_project/views/reservation/reserve_now.dart';
 import 'package:boxed_project/views/home/widget/card.dart';
 import 'package:boxed_project/widgets/custom_button.dart';
 import 'package:boxed_project/widgets/custom_drop_down.dart';

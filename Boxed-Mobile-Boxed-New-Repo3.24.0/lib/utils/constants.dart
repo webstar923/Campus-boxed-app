@@ -256,6 +256,11 @@ class Constants {
     '+383'
   ];
 
+  static List<String> countries = [
+    'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany',
+    'France', 'India', 'Japan', 'China', 'Brazil', 'South Africa'
+  ]; 
+  
   static List<String> currencyCodes = ['INR', 'USD'];
 
   static List<String> schoolList = [
@@ -328,5 +333,6 @@ class Constants {
     },
     // Add more items with images as needed
   ];
+  
   static List<String> apartmentList = ['Dorm', 'Apartment/Condo'];
 }

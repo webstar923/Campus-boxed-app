@@ -6,7 +6,7 @@ import 'package:boxed_project/views/navbar/nav_bar.dart';
 import 'package:boxed_project/views/splash/splash_screen.dart';
 import 'package:boxed_project/views/welcome/welcome_screen.dart';
 import 'package:boxed_project/widgets/error_screen.dart';
-import 'package:boxed_project/views/home/reserve_now.dart';
+import 'package:boxed_project/views/reservation/reserve_now.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
