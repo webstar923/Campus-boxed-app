@@ -1,6 +1,9 @@
 // controllers/reservation_controller.dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:boxed_project/models/reservation_model.dart';
 import 'package:boxed_project/provider/auth_provider.dart';
+import 'package:boxed_project/http/api_constant.dart';
 
 class ReservationController {
   final AuthProvider authProvider;
@@ -18,7 +21,25 @@ class ReservationController {
     return 'Unknown';
   }
 
-  void submitReservation(Reservation reservation) {
+  Future<Reservation?> submitReservation(Reservation reservation) async {
     // Handle reservation submission logic here
+    print(reservation.cardEmail);
+    final url = Uri.parse(ApiConstants.baseUrl + ApiConstants.reservations);
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"storage_box_id": 1,}),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      if (responseData['success']) {
+        // return UserModel.fromJson(responseData['data']);
+      } else {
+        throw Exception(responseData['message']);
+      }
+    } else {
+      throw Exception('Reservation failed: ${response.statusCode}');
+    }
   }
 }

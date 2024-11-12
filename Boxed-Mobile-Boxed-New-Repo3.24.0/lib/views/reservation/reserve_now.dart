@@ -10,10 +10,11 @@ import 'package:flutter/services.dart';
 import 'package:boxed_project/utils/constants.dart';
 import 'package:boxed_project/theme/colors.dart';
 import 'package:boxed_project/theme/font_structures.dart';
-import 'package:boxed_project/widgets/custom_text_field.dart';
+import 'package:boxed_project/widgets/custom_button.dart';
 import 'package:boxed_project/route_structure/go_navigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:boxed_project/widgets/custom_icon_button.dart';
+import 'package:animate_do/animate_do.dart';
 
 class ReserveNow extends StatefulWidget {
 
@@ -44,6 +45,83 @@ class _ReserveNowState extends State<ReserveNow> {
     zipCode: '',
   );
 
+  bool _isLoading = false;
+
+  void _reserve(context) async {
+
+    if (_formKey.currentState!.validate() ?? false) {
+        setState(() {
+          _isLoading = true;
+        });
+
+      try {
+        Reservation? reservedResuilt = await _controller.submitReservation(_reservation);
+        setState(() {
+          _isLoading = false;
+        });
+
+      } catch (error) {
+        
+        setState(() {
+          _isLoading = false;
+        });
+        showAnimatedWarningDialog(context, error.toString());
+      }
+    }
+                        
+  }
+  void showAnimatedWarningDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SlideInDown(
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            backgroundColor: Colors.white,
+            contentPadding: const EdgeInsets.all(7),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.redAccent,
+                  size: 35,
+                ),
+                5.kH,
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: TextButton.styleFrom(
+                  side: BorderSide(color: Colors.blue, width: 2), // Set border color and width
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Set border radius
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8), // Add padding
+                ),
+                child: Text(
+                  "OK",
+                  style: TextStyle(color: Colors.blue), // Set text color
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  
   // Function to format expiration date
   void _formatExpirationDate(String value) {
     if (value.length == 2 && !value.contains('/')) {
@@ -181,35 +259,60 @@ class _ReserveNowState extends State<ReserveNow> {
                         ),
                       ),
                       15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          'Name',
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
                       Row(
                         children: [
-                          TextFormField(
-                            initialValue: user?.firstName,
-                            decoration: const InputDecoration(
-                              labelText: 'First Name',
-                              border: OutlineInputBorder(
-                                borderRadius:BorderRadius.all(Radius.circular(5)),
-                                borderSide: BorderSide(
-                                  color: Colors.grey, 
-                                  width: 1.5,      
-                                ),
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: user?.firstName,
+                              decoration: customInputDecoration('First Name'),
+                              style: TextStyle(
+                                fontSize: mediumfontsize3,
+                                color: Colors.black,
+                                fontWeight: boldfontweight,
                               ),
+                              readOnly: true,
                             ),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                              fontWeight: boldfontweight,
-                            ),
-                            readOnly: true,
                           ),
-                          // TextFormField(
-                          //   initialValue: user?.lastName,
-                          //   decoration: InputDecoration(labelText: 'Last Name'),
-                          //   readOnly: true,
-                          // ),
+                          10.kW, // Add spacing between the text fields
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: user?.lastName,
+                              decoration: customInputDecoration('Last Name'),
+                              style: TextStyle(
+                                fontSize: mediumfontsize3,
+                                color: Colors.black,
+                                fontWeight: boldfontweight,
+                              ),
+                              readOnly: true,
+                            ),
+                          ),
                         ],
                       ),
-                      
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          'Are You A Student Or Parent/Family Member?',
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
                       Row(
                         children: [
                           Checkbox(
@@ -222,7 +325,19 @@ class _ReserveNowState extends State<ReserveNow> {
                               });
                             },
                           ),
-                          Text("Student"),
+                          Text(
+                            "Student",
+                            style: TextStyle(
+                              fontSize: mediumfontsize3,
+                              fontWeight: boldfontweight,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      10.kH,
+                      Row(
+                        children: [
                           Checkbox(
                             value: isParent,
                             onChanged: (bool? value) {
@@ -233,60 +348,199 @@ class _ReserveNowState extends State<ReserveNow> {
                               });
                             },
                           ),
-                          Text("Parent/Family Member"),
+                          5.kW,
+                          Text(
+                            "Parent/Family Member",
+                            style: TextStyle(
+                              fontSize: mediumfontsize3,
+                              fontWeight: normalfontweightvar0,
+                              color: Colors.white,
+                            ),
+                          ),
                         ],
                       ),
-                      Text(email1Label),
-                      TextFormField(
-                        initialValue: user?.email,
-                        decoration:
-                            InputDecoration(labelText: 'Your Email Address'),
-                        readOnly: true,
-                      ),
-                      Text(phone1Label),
-                      TextFormField(
-                        initialValue: user?.phoneNumber,
-                        decoration:
-                            InputDecoration(labelText: 'Your Phone Number'),
-                        readOnly: true,
-                      ),
-                      Text(email2Label),
-                      TextFormField(
-                        decoration: InputDecoration(labelText: 'Email Address'),
-                        onChanged: (value) => _reservation.email = value,
-                      ),
-                      Text(phone2Label),
-                      TextFormField(
-                        decoration: InputDecoration(labelText: 'Phone Number'),
-                        onChanged: (value) => _reservation.phoneNumber = value,
-                      ),
                       15.kH,
-                      const Text(
-                        "Password",
-                        style: TextStyle(
-                          fontSize: mediumfontsize1,
-                          color: themeblackcolor,
-                          fontWeight: boldfontweightvar1,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          email1Label,
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      20.kH,
-                      Text('Application/Reservation Fee'),
                       10.kH,
-                      Text("Price: \$50.00",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                      20.kH,
-                      Text("Securely Pay Via Stripe"),
-                      Text("Email"),
                       TextFormField(
-                        decoration: InputDecoration(labelText: 'you@example.com'),
-                        onChanged: (value) => _reservation.cardEmail = value,
+                        initialValue: user?.email,
+                        decoration: customInputDecoration('Your Email Address'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        readOnly: true,
                       ),
-                      Text("Card Number"),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          phone1Label,
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      TextFormField(
+                        initialValue: user?.phoneNumber,
+                        decoration: customInputDecoration('Your Phone Number'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        readOnly: true,
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          email2Label,
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      TextFormField(
+                        decoration: customInputDecoration('Email Address'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        onChanged: (value) => _reservation.email = value,
+                        validator: (value) => value!.isEmpty ? "Enter Email Address" : null,
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          phone2Label,
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      TextFormField(
+                        decoration: customInputDecoration('Phone Number'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        onChanged: (value) => _reservation.phoneNumber = value,
+                        validator: (value) => value!.isEmpty ? "Enter Phone Number" : null,
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          'Application/Reservation Fee',
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Price: \$50.00",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Securely Pay Via Stripe",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Email",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      TextFormField(
+                        decoration: customInputDecoration('you@example.com'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        onChanged: (value) => _reservation.cardEmail = value,
+                        validator: (value) => value!.isEmpty ? "Enter email" : null,
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Card Number",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
                       TextFormField(
                         decoration: InputDecoration(
-                          labelText: '1234 1234 1234 1234',
+                          hintText: "1234 1234 1234 1234",
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                              width: 1.5,
+                            ),
+                          ),
                           suffixIcon: Icon(getCardIcon(cardTypeIcon)),
+                        ),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -294,14 +548,29 @@ class _ReserveNowState extends State<ReserveNow> {
                             cardTypeIcon = _controller.detectCardType(value);
                           });
                         },
+                        validator: (value) => value!.isEmpty ? "Enter CardNumber" : null,
                       ),
-                      Text('Expiration Date'),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Expiration Date",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
                       TextFormField(
                         controller: expirationController,
                         keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: '01/01',
-                          hintText: 'MM/YY',
+                        decoration: customInputDecoration('MM/YY'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
                         ),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -312,14 +581,41 @@ class _ReserveNowState extends State<ReserveNow> {
                           }),
                         ],
                         onChanged: (value) => _reservation.expirationDate = value,
+                        validator: (value) => value!.isEmpty ? "Enter ExpirationDate" : null,
                       ),
-                      Text('Security Code'),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Security Code",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
                       TextFormField(
                         controller: cvcController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          labelText: 'CVC',
-                          suffixIcon: Icon(Icons.lock), // Example suffix icon
+                          hintText: "CVC",
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                              width: 1.5,
+                            ),
+                          ),
+                          suffixIcon: Icon(Icons.lock),
+                        ),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
                         ),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -327,10 +623,23 @@ class _ReserveNowState extends State<ReserveNow> {
                               3), // Limit to 3 digits
                         ],
                         onChanged: (value) => _reservation.securityCode = value,
+                        validator: (value) => value!.isEmpty ? "CVC" : null,
                       ),
-                      Text('Country'),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Country",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,                      
                       DropdownButtonFormField<String>(
-                        decoration: InputDecoration(labelText: 'Country'),
+                        decoration: customInputDecoration('Country'),
                         value: selectedCountry,
                         onChanged: (String? newCountry) {
                           setState(() {
@@ -344,22 +653,62 @@ class _ReserveNowState extends State<ReserveNow> {
                             child: Text(country),
                           );
                         }).toList(),
+                        validator: (value) => value!.isEmpty ? "Choose Country" : null,
                       ),
-                      Text('ZIP Code'),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "ZIP Code",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
                       TextFormField(
-                        decoration: InputDecoration(labelText: '12345'),
+                        decoration: customInputDecoration('12345'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
                         onChanged: (value) => _reservation.zipCode = value,
-                      ),
-                            
+                        validator: (value) => value!.isEmpty ? "ZIP Code" : null,
+                      ),   
                       20.kH,
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _controller.submitReservation(_reservation);
-                          }
-                        },
-                        child: const Text('Reserve Now'),
+                      CustomButton(
+                        onTap:() => _reserve(context),
+                        height: 55,
+                        buttoncolor: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        child: const Text(
+                          "Reserve Now",
+                          style: TextStyle(
+                            color: Palette.themecolor,
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                          ),
+                        ),
                       ),
+                      10.kH,
+                      if (_isLoading)
+                        Container(
+                          color: Colors.white.withOpacity(0),
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     if (_formKey.currentState!.validate()) {
+                      //       _controller.submitReservation(_reservation);
+                      //     }
+                      //   },
+                      //   child: const Text('Reserve Now'),
+                      // ),
                     ],
                   ),
                 ),
@@ -370,6 +719,21 @@ class _ReserveNowState extends State<ReserveNow> {
       ],
     ),
   );    
+  }
+
+  InputDecoration customInputDecoration(String labelText) {
+    return InputDecoration(
+      hintText: labelText,
+      filled: true,
+      fillColor: Colors.grey[200],
+      border: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        borderSide: BorderSide(
+          color: Colors.grey,
+          width: 1.5,
+        ),
+      ),
+    );
   }
 
   IconData getCardIcon(String cardType) {

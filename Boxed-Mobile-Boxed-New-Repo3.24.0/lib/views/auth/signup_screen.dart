@@ -179,6 +179,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           10.kH,
                           TextFormField(
                             controller: _firstNameController,
+                            autofocus: true,
                             decoration: const InputDecoration(
                               labelText: "First Name",
                               border: OutlineInputBorder(),

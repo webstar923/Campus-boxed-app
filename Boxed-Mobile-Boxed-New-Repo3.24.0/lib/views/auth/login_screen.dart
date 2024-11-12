@@ -200,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fillColor: themetextfieldcolor,
                                 focusedBorderColor: Palette.themecolor,
                                 borderWidth: 1.5,
+                                autoFocus: true,
                                 validator: (value) => value!.isEmpty ? "Enter email" : null,
                               ),
                               15.kH,
@@ -270,7 +271,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               // Loading indicator overlay
-                              5.kH,
+                              10.kH,
                               if (_isLoading)
                                 Container(
                                   color: Colors.black.withOpacity(0),
