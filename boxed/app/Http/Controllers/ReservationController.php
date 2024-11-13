@@ -12,6 +12,7 @@ class ReservationController extends Controller
     use ApiResponsesTrait;
     
     public function store(Request $request) {
+
         $request->validate([
             'storage_box_id' => 'required',
             'pickup_time' => 'sometimes',
@@ -21,10 +22,17 @@ class ReservationController extends Controller
             'items_movers_possession' => 'sometimes',
             'status' => 'sometimes',
             'packaging_wrapper_ids' => 'sometimes|array',
+            'receiver_email' => 'required|email',
+            'receiver_phone' => 'nullable|string|max:20',
         ]);
 
         $reservationInput = $request->except(['packaging_wrapper_ids', 'packaging_wrapper_items']);
-        $reservationInput['user_id'] = Auth::user()->id;
+        
+        // new working
+        $reservationInput['user_id'] = $request.sender_id ;
+        // $reservationInput['user_id'] = Auth::user()->id;
+
+
         // $reservationInput['items'] = json_encode($request->packaging_wrapper_items);
         // dd($reservationInput);
         

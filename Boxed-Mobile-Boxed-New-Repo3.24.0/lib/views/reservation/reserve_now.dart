@@ -344,7 +344,7 @@ class _ReserveNowState extends State<ReserveNow> {
                               setState(() {
                                 isParent = value ?? false;
                                 isStudent =
-                                    !isParent; // Toggle the other checkbox
+                                    !isParent;
                               });
                             },
                           ),
@@ -353,7 +353,7 @@ class _ReserveNowState extends State<ReserveNow> {
                             "Parent/Family Member",
                             style: TextStyle(
                               fontSize: mediumfontsize3,
-                              fontWeight: normalfontweightvar0,
+                              fontWeight: boldfontweight,
                               color: Colors.white,
                             ),
                           ),
@@ -361,7 +361,7 @@ class _ReserveNowState extends State<ReserveNow> {
                       ),
                       15.kH,
                       Align(
-                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        alignment: Alignment.centerLeft,
                         child: Text(
                           email1Label,
                           style: TextStyle(

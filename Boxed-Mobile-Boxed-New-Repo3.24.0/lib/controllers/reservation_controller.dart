@@ -1,6 +1,7 @@
 // controllers/reservation_controller.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:boxed_project/models/user_model.dart';
 import 'package:boxed_project/models/reservation_model.dart';
 import 'package:boxed_project/provider/auth_provider.dart';
 import 'package:boxed_project/http/api_constant.dart';
@@ -23,12 +24,24 @@ class ReservationController {
 
   Future<Reservation?> submitReservation(Reservation reservation) async {
     // Handle reservation submission logic here
-    print(reservation.cardEmail);
+    print('fff');
+    print(authProvider.user?.id);
+    print('object');
+    UserModel? user = authProvider.user;
     final url = Uri.parse(ApiConstants.baseUrl + ApiConstants.reservations);
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"storage_box_id": 1,}),
+      body: jsonEncode({
+        "storage_box_id": 1,
+        "sender_id": user?.id,
+        "receiver_email": reservation.email,
+        "receiver_phone": reservation.phoneNumber,
+        "card_number": reservation.cardNumber,
+        "expiration_date": reservation.expirationDate,
+        "cvc": reservation.securityCode,
+        "zip_code": reservation.zipCode,
+        }),
     );
 
     if (response.statusCode == 200) {
