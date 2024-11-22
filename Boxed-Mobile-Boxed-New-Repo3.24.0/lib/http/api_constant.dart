@@ -1,6 +1,7 @@
 class ApiConstants {
-  static String baseUrl = "https://wov.tvd.mybluehost.me/api";
+  // static String baseUrl = "https://wov.tvd.mybluehost.me/api";
       // 'http://35.225.167.201/boxed-campus-storage/public/api';
+  static String baseUrl = "http://192.168.56.1:8000/api";
   static String companyId = '1';
   static String userLogin = '/login';
   static String register = '/register';

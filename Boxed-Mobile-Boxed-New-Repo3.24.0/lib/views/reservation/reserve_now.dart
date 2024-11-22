@@ -15,6 +15,7 @@ import 'package:boxed_project/route_structure/go_navigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:boxed_project/widgets/custom_icon_button.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dart';
 
 class ReserveNow extends StatefulWidget {
 
@@ -55,11 +56,14 @@ class _ReserveNowState extends State<ReserveNow> {
         });
 
       try {
-        Reservation? reservedResuilt = await _controller.submitReservation(_reservation);
+        String? reservedResuilt = await _controller.submitReservation(_reservation);
         setState(() {
           _isLoading = false;
         });
-
+        Go.route(
+          context,
+          const ReservationDetailScreen(),
+        );        
       } catch (error) {
         
         setState(() {
@@ -138,6 +142,7 @@ class _ReserveNowState extends State<ReserveNow> {
     // Set initial checkbox status based on role
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     _controller = ReservationController(authProvider);
+
   }
 
   @override
@@ -149,7 +154,8 @@ class _ReserveNowState extends State<ReserveNow> {
 
   @override
   Widget build(BuildContext context) {
-
+    
+    final size = MediaQuery.sizeOf(context);
     final user = Provider.of<AuthProvider>(context).user;
     bool isStudent = _controller.isStudent();
     bool isParent = isStudent ? false : true;
@@ -160,21 +166,6 @@ class _ReserveNowState extends State<ReserveNow> {
     String email2Label = isStudent ? "Parent/Family Member Email" : "Student Email";
     String phone2Label = isStudent ? "Parent/Family Member Phone Number" : "Student Phone Number";
 
-    bool isLoggedIn = Provider.of<AuthProvider>(context).isLoggedIn;
-    if (!isLoggedIn) {
-      // You can navigate to the login screen here
-      Future.delayed(const Duration(milliseconds: 500), () {
-        Navigator.pushReplacementNamed(context, '/login');
-      });
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-
-
-    final size = MediaQuery.sizeOf(context);
     return Scaffold(
     body: Stack(
       children: [
@@ -199,38 +190,12 @@ class _ReserveNowState extends State<ReserveNow> {
                   bottom: Radius.circular(10),
                 ),
               ),
+              centerTitle: true,
               title: Image.asset(
                 Constants.splashLogo,
                 width: 200,
               ),
               actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 25),
-                  child: GestureDetector(
-                    onTap: () {
-                      Go.route(
-                        context,
-                        const ReserveNow(),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Palette.themecolor),
-                      ),
-                      child: const Text(
-                        "RESERVE NOW",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
                 CustomIconButton(
                   onTap: () {},
                   child: const Icon(
@@ -449,7 +414,7 @@ class _ReserveNowState extends State<ReserveNow> {
                           fontWeight: boldfontweight,
                         ),
                         onChanged: (value) => _reservation.phoneNumber = value,
-                        validator: (value) => value!.isEmpty ? "Enter Phone Number" : null,
+                        // validator: (value) => value!.isEmpty ? "Enter Phone Number" : null,
                       ),
                       15.kH,
                       Align(
@@ -620,7 +585,7 @@ class _ReserveNowState extends State<ReserveNow> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(
-                              3), // Limit to 3 digits
+                              4), // Limit to 3 digits
                         ],
                         onChanged: (value) => _reservation.securityCode = value,
                         validator: (value) => value!.isEmpty ? "CVC" : null,
@@ -684,12 +649,30 @@ class _ReserveNowState extends State<ReserveNow> {
                         height: 55,
                         buttoncolor: Colors.white,
                         borderRadius: BorderRadius.circular(10),
-                        child: const Text(
-                          "Reserve Now",
-                          style: TextStyle(
-                            color: Palette.themecolor,
-                            fontSize: mediumfontsize3,
-                            fontWeight: boldfontweight,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF004BA0), // Button color
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.white),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "Reserve Now",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
                         ),
                       ),

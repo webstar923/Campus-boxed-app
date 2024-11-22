@@ -114,7 +114,6 @@ class ApiService {
 ) async {
   final url = '${ApiConstants.baseUrl}${ApiConstants.reservations}';
   final token = (await getAdminToken()).toString();
-  
   await HandleRequest(context).handleRequest('POST', url, token, true, body: payload, callback: callback);
 }
 }

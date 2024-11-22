@@ -17,12 +17,11 @@ Route::post('otp-send', [authController::class, 'sendOtp']);
 Route::post('otp-verify', [authController::class, 'verifyOtp']);
 Route::post('reset-password', [authController::class, 'resetPassword']);
 Route::post('/reservations', [ReservationController::class, 'store']);
+// Route::get('/user-details', [apiController::class, 'getUserDetails']);
 Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('user-details', [apiController::class, 'getUserDetails']);
-
-    
-    
+    Route::get('/user-details', [apiController::class, 'getUserDetails']);
+    // Route::post('/reservations', [ReservationController::class, 'store']);
 });
 
 Route::get('/storage-boxes', [ApiController::class, 'getStorageBoxes']);

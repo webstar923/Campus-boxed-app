@@ -61,7 +61,8 @@ class _ReserveCardState extends State<ReserveCard> {
               widget.subtitle,
               style: const TextStyle(
                 fontSize: mediumfontsize3,
-                color: Color.fromARGB(255, 243, 24, 24),
+                // color: Color.fromARGB(255, 243, 24, 24),
+                color: Colors.black,
                 fontWeight: boldfontweightvar1,
               ),
             ),

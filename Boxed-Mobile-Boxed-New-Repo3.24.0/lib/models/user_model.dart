@@ -9,7 +9,8 @@ class UserModel {
   final String? updatedAt;
   final String? createdAt;
   final int? id;
-  final String? password; // Add password if needed for login
+  final String? password;
+  final String? token;
 
   UserModel({
     this.firstName,
@@ -23,6 +24,7 @@ class UserModel {
     this.createdAt,
     this.id,
     this.password,
+    this.token,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class UserModel {
       updatedAt: json['updated_at'],
       createdAt: json['created_at'],
       id: json['id'],
+      token: json['token'],
     );
   }
 
@@ -53,6 +56,7 @@ class UserModel {
       'created_at': createdAt,
       'id': id,
       'password': password,
+      'token': token,
     };
   }
 }

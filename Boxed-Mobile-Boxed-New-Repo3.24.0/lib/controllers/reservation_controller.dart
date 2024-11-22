@@ -5,6 +5,8 @@ import 'package:boxed_project/models/user_model.dart';
 import 'package:boxed_project/models/reservation_model.dart';
 import 'package:boxed_project/provider/auth_provider.dart';
 import 'package:boxed_project/http/api_constant.dart';
+import 'package:boxed_project/http/api_client.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 
 class ReservationController {
   final AuthProvider authProvider;
@@ -22,17 +24,36 @@ class ReservationController {
     return 'Unknown';
   }
 
-  Future<Reservation?> submitReservation(Reservation reservation) async {
-    // Handle reservation submission logic here
-    print('fff');
-    print(authProvider.user?.id);
-    print('object');
+  Future<String?> submitReservation(Reservation reservation) async {
+
     UserModel? user = authProvider.user;
-    final url = Uri.parse(ApiConstants.baseUrl + ApiConstants.reservations);
-    final response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
+
+    // Extract card details
+    // final cardDetails = CardDetails(
+    //   number: reservation.cardNumber.trim(),
+    //   expirationMonth: int.parse(reservation.expirationDate.split('/')[0]),
+    //   expirationYear: int.parse('20${reservation.expirationDate.split('/')[1]}'),
+    //   cvc: reservation.securityCode.trim(),
+    // );
+
+    // try {
+    //   // Create a Payment Method
+    //   final paymentMethod = await Stripe.instance.createPaymentMethod(
+    //     PaymentMethodParams.card(
+    //       paymentMethodData: PaymentMethodData(
+    //         billingDetails: BillingDetails(
+    //           email: reservation.cardEmail.trim(),
+    //         ),
+    //       ),
+    //       // cardDetails: cardDetails,
+    //     ),
+    //   );
+    //   print(paymentMethod.id);
+    // } catch (e) {
+    //   print('Error: $e');
+    // }
+    final url = '${ApiConstants.baseUrl}${ApiConstants.reservations}';
+    final body = jsonEncode({
         "storage_box_id": 1,
         "sender_id": user?.id,
         "receiver_email": reservation.email,
@@ -41,13 +62,12 @@ class ReservationController {
         "expiration_date": reservation.expirationDate,
         "cvc": reservation.securityCode,
         "zip_code": reservation.zipCode,
-        }),
-    );
-
+        });
+    final response = await makeAuthenticatedRequest(url, 'POST', body: body);
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
       if (responseData['success']) {
-        // return UserModel.fromJson(responseData['data']);
+        return 'Reservation Success';
       } else {
         throw Exception(responseData['message']);
       }

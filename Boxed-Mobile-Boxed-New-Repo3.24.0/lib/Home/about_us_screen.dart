@@ -1,4 +1,4 @@
-import 'package:boxed_project/ReservationScreens/reservation_screen.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_screen.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
 import 'package:flutter/material.dart';
 

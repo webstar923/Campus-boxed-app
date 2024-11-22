@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
-import 'package:boxed_project/ReservationScreens/reservation_details_screen.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({Key? key}) : super(key: key);

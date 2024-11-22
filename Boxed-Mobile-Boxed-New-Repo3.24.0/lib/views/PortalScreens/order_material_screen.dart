@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:boxed_project/Model/packingMaterial.dart';
+import 'package:boxed_project/models/packingMaterial.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
 import 'package:boxed_project/http/api_service.dart';
 import 'package:boxed_project/common/base_widget.dart';

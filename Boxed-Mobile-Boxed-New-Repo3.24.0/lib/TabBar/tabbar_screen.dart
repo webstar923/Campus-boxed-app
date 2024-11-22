@@ -5,7 +5,7 @@ import 'package:boxed_project/TabBar/help_screen.dart';
 import 'package:boxed_project/ContactUs/contact_us.dart';
 import 'package:boxed_project/pricing/pricing_screen.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
-import 'package:boxed_project/ReservationScreens/reservation_qrcode_screen.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_qrcode_screen.dart';
 
 class TabBarScreen extends StatefulWidget {
   const TabBarScreen({super.key});

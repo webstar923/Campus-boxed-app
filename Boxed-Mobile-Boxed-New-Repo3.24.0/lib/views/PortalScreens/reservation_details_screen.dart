@@ -1,26 +1,14 @@
 import 'package:boxed_project/Utility/common.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:boxed_project/theme/spacing.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
-import 'package:boxed_project/ReservationScreens/pickup_view.dart';
-import 'package:boxed_project/ReservationScreens/label_item_screen.dart';
-import 'package:boxed_project/ReservationScreens/reservation_screen.dart';
-import 'package:boxed_project/ReservationScreens/customer_status_view.dart';
-import 'package:boxed_project/ReservationScreens/order_material_screen.dart';
-import 'package:boxed_project/ReservationScreens/reservation_detail_slider.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ReservationDetailScreen(),
-    );
-  }
-}
+import 'package:boxed_project/views/PortalScreens/pickup_view.dart';
+import 'package:boxed_project/views/PortalScreens/label_item_screen.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_confirm_detailed_screen.dart';
+import 'package:boxed_project/views/PortalScreens/customer_status_view.dart';
+import 'package:boxed_project/views/PortalScreens/order_material_screen.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_detail_slider.dart';
 
 class ReservationDetailScreen extends StatefulWidget {
   const ReservationDetailScreen({super.key});
@@ -81,7 +69,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                 ),
               ),
               Align(
-                alignment: Alignment.bottomLeft,
+                alignment: Alignment.center,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, bottom: 15.0),
                   child: Image.asset(
@@ -104,7 +92,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
             },
             children: const [
               Center(child: ReservationDetailSlider()),
-              Center(child: ReservationScreen()),
+              Center(child: ReservationConfirmDetailedScreen()),
               Center(child: OrderMaterialScreen()),
               Center(child: LabelItemScreen()),
               Center(child: PickupView()),
@@ -120,6 +108,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                   children: [
                     buildStepIndicator(true, 'Reserve', 0),
                     buildLine(0 < _currentIndex),
+                    // buildStepIndicator(0 < _currentIndex, 'Order Materials', 1),
                     buildStepIndicator(0 < _currentIndex, 'Confirm Details', 1),
                     buildLine(1 < _currentIndex),
                     buildStepIndicator(1 < _currentIndex, 'Order Materials', 2),
@@ -144,7 +133,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                           fontSize: 12, // Adjust font size as needed
                           fontWeight:
                               FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.black, // Adjust color as needed
+                          color: Colors.white, // Adjust color as needed
                         ))),
                 SizedBox(
                     width: screenWidth / 6,
@@ -154,7 +143,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                           fontSize: 12, // Adjust font size as needed
                           fontWeight:
                               FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.black, // Adjust color as needed
+                          color: Colors.white, // Adjust color as needed
                         ))),
                 SizedBox(
                     width: screenWidth / 6,
@@ -164,7 +153,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                           fontSize: 12, // Adjust font size as needed
                           fontWeight:
                               FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.black, // Adjust color as needed
+                          color: Colors.white, // Adjust color as needed
                         ))),
                 SizedBox(
                     width: screenWidth / 6,
@@ -174,7 +163,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                           fontSize: 12, // Adjust font size as needed
                           fontWeight:
                               FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.black, // Adjust color as needed
+                          color: Colors.white, // Adjust color as needed
                         ))),
                 SizedBox(
                     width: screenWidth / 6,
@@ -184,7 +173,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                           fontSize: 12, // Adjust font size as needed
                           fontWeight:
                               FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.black, // Adjust color as needed
+                          color: Colors.white, // Adjust color as needed
                         ))),
                 SizedBox(
                     width: screenWidth / 6,
@@ -194,11 +183,11 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                           fontSize: 12, // Adjust font size as needed
                           fontWeight:
                               FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.black, // Adjust color as needed
+                          color: Colors.white, // Adjust color as needed
                         ))),
               ],
             ),
-            const SizedBox(height: 10),
+            10.kH,
               OutlinedButton(
                 onPressed: () {
                   setState(() {
@@ -234,7 +223,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                   ),
                 ),
               ),
-            const SizedBox(height: 10),
+            10.kH,
           ],
         ),
       ],

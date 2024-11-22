@@ -17,7 +17,14 @@ class AuthController extends Controller
     use ApiResponsesTrait, PaymentTrait;
 
     const OTP_EXPIRATION_MINUTES = 10;
-    
+
+    public function generateShortCustomerId()
+    {
+        $uuid = Str::orderedUuid()->toString(); // Generate UUID
+        $shortId = substr(base_convert(md5($uuid), 16, 10), 0, 7); // Convert to numeric and shorten
+        return $shortId;
+    }
+
     public function login(Request $request) : JsonResponse {
         $credentials = $request->only(['email', 'password']);
 
@@ -26,7 +33,7 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        // $user['token'] = $user->createToken('Personal Access Token')->accessToken;
+        $user['token'] = $user->createToken('Personal Access Token')->accessToken;
 
         return $this->success($user, "Logged in");
     }
@@ -58,10 +65,9 @@ class AuthController extends Controller
         $user->location = $request->location;
         $user->phone_number = $request->phone_number;
         $user->password = Hash::make($request->input('password'));
-        $user->customer_id = Str::orderedUuid();
+        $user->customer_id = $this->generateShortCustomerId();
         $user->save();
-
-        // $user['token'] = $user->createToken('Personal Access Token')->accessToken;
+        $user['token'] = $user->createToken('Personal Access Token')->accessToken;
 
         // registration payment
         $input = $request->toArray();

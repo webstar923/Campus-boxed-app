@@ -7,24 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:boxed_project/Utility/constant.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
-import 'package:boxed_project/ReservationScreens/reservation_details_screen.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dart';
 
-void main() {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-  ));
-  runApp(const MaterialApp(home: ReservationScreen()));
-}
-
-class ReservationScreen extends StatefulWidget {
-  const ReservationScreen({super.key});
+class ReservationConfirmDetailedScreen extends StatefulWidget {
+  const ReservationConfirmDetailedScreen({super.key});
 
   @override
-  State<ReservationScreen> createState() => _ReservationScreenState();
+  State<ReservationConfirmDetailedScreen> createState() => _ReservationConfirmDetailedScreenState();
 }
 
-class _ReservationScreenState extends State<ReservationScreen> {
+class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDetailedScreen> {
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();

@@ -16,6 +16,7 @@ import 'package:boxed_project/widgets/filled_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
 import 'package:boxed_project/provider/auth_provider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -51,6 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
         });
         if (loggedInUser != null) {
           Provider.of<AuthProvider>(context, listen: false).login(loggedInUser);
+          final storage = FlutterSecureStorage();
+          await storage.write(key: 'access_token', value: loggedInUser.token);
+          await storage.write(key: 'customer_id', value: loggedInUser.customerId);
+          // String? token = await storage.read(key: 'access_token');
           // Save the user data if needed in the AuthProvider or elsewhere
           Go.named(context, RouteName.reserveNowScreen);
         }

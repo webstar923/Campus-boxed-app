@@ -1,6 +1,5 @@
 import 'package:boxed_project/route_structure/go_navigator.dart';
 import 'package:boxed_project/utils/constants.dart';
-import 'package:boxed_project/views/reservation/reserve_now.dart';
 import 'package:boxed_project/views/home/widget/card.dart';
 import 'package:boxed_project/widgets/custom_button.dart';
 import 'package:boxed_project/widgets/custom_drop_down.dart';
@@ -17,6 +16,10 @@ import 'package:boxed_project/views/home/widget/schools_we_serve.dart'; // Schoo
 import 'package:boxed_project/views/home/widget/trusted_partner.dart'; // Trusted partner Widget
 import 'package:boxed_project/views/home/widget/servey.dart'; // Trusted partner Widget
 import 'package:boxed_project/views/home/widget/self_move.dart'; // Widget
+import 'package:provider/provider.dart';
+import 'package:boxed_project/provider/auth_provider.dart';
+import 'package:boxed_project/views/reservation/reserve_now.dart';
+import 'package:boxed_project/views/auth/signup_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,104 +38,140 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    bool isLoggedIn = Provider.of<AuthProvider>(context).isLoggedIn;
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
-            SliverLayoutBuilder(
-              builder: (context, constraints) {
-                return SliverAppBar(
-                  surfaceTintColor: Palette.themecolor,
-                  backgroundColor: Palette.themecolor,
-                  pinned: true,
-                  expandedHeight: 400,
-                  elevation: 0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(10),
-                    ),
-                  ),
-                  title: Image.asset(
-                    Constants.splashLogo,
-                    width: 200,
-                  ),
-                  actions: [
-                    // "Reserve Now" button to the right of the logo
-                    Padding(
-                      padding: const EdgeInsets.only(right: 25), // Right padding for spacing
-                      child: GestureDetector(
-                        onTap: () {
-                          // Navigate to the ReserveNow page when the button is pressed
-                          Go.route(
-                            context,
-                            const ReserveNow(),
-                          );
-                        },
 
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white, // Button background color
-                            borderRadius: BorderRadius.circular(5), // Border radius of 5
-                            border: Border.all(color: Palette.themecolor), // Border color
-                          ),     
-
-                        child: const Text(
-                          "RESERVE NOW",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0),
-                            fontWeight: boldfontweight,
-                            fontSize: 14
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _SliverPersistentHeaderDelegate(
+                minHeight: 60,
+                maxHeight: 60,
+                child: Container(
+                  color: Palette.themecolor,
+                  child: Padding(
+                    // padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              Constants.splashLogo,
+                              width: 200,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                    CustomIconButton(
-                      onTap: () {},
-                      child: const Icon(
-                        CupertinoIcons.bell,
-                        color: themewhitecolor,
-                      ),
-                    ),
-                    10.kW, // Space after the notification icon
-                  ],
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        FilledBox(
-                          width: double.infinity,
-                          padding: EdgeInsets.zero,
-                          image: const DecorationImage(
-                            image: AssetImage(
-                              "assets/images/background.png",
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(0),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                10.kH,
-                                // banner
-                                banners(size),
-                                // search
-                                // letsTrack(),
-                              ],
-                            ),
+                        CustomIconButton(
+                          onTap: () {},
+                          child: const Icon(
+                            CupertinoIcons.bell,
+                            color: Colors.white,
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
-              },
+                ),
+              ),
             ),
-          ];
+
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _SliverPersistentHeaderDelegate(
+                minHeight: 60,
+                maxHeight: 60,
+                child: Container(
+                  color: Palette.themecolor,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (isLoggedIn) {
+                          Go.route(
+                            context,
+                            const ReserveNow(),
+                          );
+                        } else {
+                          Go.route(
+                            context,
+                            const SignupScreen(),
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF004BA0), // Button color
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.white),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 5,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Center(
+                          child: Text(
+                            "RESERVE NOW",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // SliverAppBar with flexible background
+            SliverAppBar(
+              surfaceTintColor: Palette.themecolor,
+              backgroundColor: Palette.themecolor,
+              pinned: false,
+              expandedHeight: 300,
+              elevation: 2,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(10),
+                ),
+              ),
+              flexibleSpace: FlexibleSpaceBar(
+                background: FilledBox(
+                  width: double.infinity,
+                  padding: EdgeInsets.zero,
+                  image: const DecorationImage(
+                    image: AssetImage("assets/images/background.png"),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        10.kH,
+                        banners(size), // Custom banner widget
+                        10.kH,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),];
         },
+
         body: SafeArea(
           child: Column(
             children: [
@@ -140,7 +179,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      // fillForms(size),
                       setReminderWidget(),
                       howWeWork(),
                       SchoolsWeServeWidget(),
@@ -148,8 +186,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       SelfMove(),
                       Servey(),
                       setReminderWidget(),
-                      // letsTrack(),
-                      // letsTrackFroms()
                     ],
                   ),
                 ),
@@ -176,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'assets/images/banner2.png',
               'assets/images/banner3.png',
             ],
-            height: size.height / 100 * 45,
+            height: size.height / 100 * 40,
             // image size error issue
             isNetworkImage: false,
             useShadow: false,
@@ -261,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
+                20.kH,
                 // Phone Number Input
                 SizedBox(
                   width: double.infinity,
@@ -278,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 15),
+                15.kH,
                 // Email Input
                 SizedBox(
                   width: double.infinity,
@@ -295,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ), 
                   ),
                 ),
-                const SizedBox(height: 20),
+                20.kH,
                 // "Remind Me" Button
                 SizedBox(
                   width: double.infinity,
@@ -660,4 +696,32 @@ class _HomeScreenState extends State<HomeScreen> {
   //     ),
   //   );
   // }
+}
+
+class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  _SliverPersistentHeaderDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => maxHeight;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return child;
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
 }

@@ -12,8 +12,7 @@ class ReservationController extends Controller
     use ApiResponsesTrait;
     
     public function store(Request $request) {
-
-        $request->validate([
+       $request->validate([
             'storage_box_id' => 'required',
             'pickup_time' => 'sometimes',
             'dropoff_time' => 'sometimes',
@@ -26,25 +25,31 @@ class ReservationController extends Controller
             'receiver_phone' => 'nullable|string|max:20',
         ]);
 
-        $reservationInput = $request->except(['packaging_wrapper_ids', 'packaging_wrapper_items']);
-        
+        // $reservationInput = $request->except(['packaging_wrapper_ids', 'packaging_wrapper_items', 'card_number', 'expiration_date', 'cvc', 'zip_code']);
+        $reservationInput = $request->except(['card_number', 'expiration_date', 'cvc', 'zip_code']);
         // new working
-        $reservationInput['user_id'] = $request.sender_id ;
+        $reservationInput['user_id'] = $request->sender_id ;
         // $reservationInput['user_id'] = Auth::user()->id;
 
 
         // $reservationInput['items'] = json_encode($request->packaging_wrapper_items);
-        // dd($reservationInput);
-        
-        $reservation = Reservation::create($reservationInput);
-        foreach ($request->packaging_wrapper_ids as $packagingWrapperId) {
-            $packagingWrapper = PackagingWrapper::find($packagingWrapperId['id']);
+        // $reservation = Reservation::create($reservationInput);
+        $reservation = new \App\Models\Reservation();
+        $reservation->user_id = $reservationInput['user_id'];
+        $reservation->storage_box_id = $reservationInput['storage_box_id'];
+        $reservation->receiver_email = $reservationInput['receiver_email'];
+        $reservation->receiver_phone = $reservationInput['receiver_phone'];
+        $reservation->save();
+        //  Part temporarily removed for testing
+        // foreach ($request->packaging_wrapper_ids as $packagingWrapperId) {
+        //     $packagingWrapper = PackagingWrapper::find($packagingWrapperId['id']);
 
-            $packagingWrapper->reservations()->attach($reservation, ["items" => json_encode($packagingWrapperId['items'])]);
-        }
+        //     $packagingWrapper->reservations()->attach($reservation, ["items" => json_encode($packagingWrapperId['items'])]);
+        // }
         
-        $data = $reservation->load('packagingWrappers');
+        // $data = $reservation->load('packagingWrappers');
 
-        return $this->success($data, "Box Reserved Succussfully");
+        // return $this->success($data, "Box Reserved Succussfully");
+        return $this->success("Box Reserved Succussfully");
     }
 }

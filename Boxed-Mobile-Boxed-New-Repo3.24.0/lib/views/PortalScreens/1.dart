@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:boxed_project/Utility/constant.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
-import 'package:boxed_project/ReservationScreens/reservation_details_screen.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dart';
 
 class ReservationScreen extends StatefulWidget {
   const ReservationScreen({super.key});
