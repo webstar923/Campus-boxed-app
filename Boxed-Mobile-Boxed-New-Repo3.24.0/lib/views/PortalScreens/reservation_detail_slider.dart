@@ -107,6 +107,64 @@ class _ReservationDetailSliderState extends State<ReservationDetailSlider> {
                                   child: const Row(
                                     children: [
                                       Text(
+                                        'PickUp Details:',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          '9:30am 5/30/2025',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        16.0), // Corner radius for data containers
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                  child: const Row(
+                                    children: [
+                                      Text(
+                                        'Status:',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          'Awaiting Pickup',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        16.0), // Corner radius for data containers
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                  child: const Row(
+                                    children: [
+                                      Text(
                                         'Next Step:',
                                         style: TextStyle(
                                           fontSize: 16,
@@ -116,7 +174,7 @@ class _ReservationDetailSliderState extends State<ReservationDetailSlider> {
                                       SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          'Order Materials',
+                                          'Confirm Details',
                                           style: TextStyle(
                                             fontSize: 16,
                                           ),

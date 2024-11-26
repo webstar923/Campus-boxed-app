@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:boxed_project/common/base_widget.dart';
 import 'package:boxed_project/http/api_service.dart';
+import 'package:boxed_project/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:boxed_project/Utility/constant.dart';
@@ -18,10 +19,8 @@ class ReservationConfirmDetailedScreen extends StatefulWidget {
 
 class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDetailedScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _fullNameController = TextEditingController();
-  final _phoneNumberController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _parentEmailController = TextEditingController();
+  final _pickupDateController = TextEditingController();
+  final _dropDateController = TextEditingController();
   final _customLocationController = TextEditingController();
   String? selectedLocation;
   String? selectedApartment;
@@ -67,6 +66,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
           Map<String, dynamic> data = jsonResponse['data'];
           String message = jsonResponse['message'] ?? 'Data fetched successfully!';
           String apiSelectedLocation = data['location'] ?? '';
+
           setState(() {
             if (Constant.schoolList.contains(apiSelectedLocation)) {
               selectedLocation = apiSelectedLocation;
@@ -77,9 +77,6 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
               selectedLocation = Constant.schoolList.isNotEmpty ? Constant.schoolList.first : null;
             }
 
-            _fullNameController.text = '${data['first_name']} ${data['last_name']}';
-            _phoneNumberController.text = data['phone_number'] ?? '';
-            _emailController.text = data['email'] ?? '';
             selectedApartment = Constant.apartmentList.contains(data['apartment'])
                 ? data['apartment']
                 : (Constant.apartmentList.isNotEmpty ? Constant.apartmentList.first : null);
@@ -122,7 +119,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
         }
       }
     }
-
+    // Temporary Stopped Part
     await ApiService(context).getUserDetails(callback);
   }
 
@@ -137,10 +134,8 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
 
   @override
   void dispose() {
-    _fullNameController.dispose();
-    _phoneNumberController.dispose();
-    _emailController.dispose();
-    _parentEmailController.dispose();
+    _pickupDateController.dispose();
+    _dropDateController.dispose();
     _customLocationController.dispose();
     super.dispose();
   }
@@ -162,130 +157,97 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 32.0),
+                        32.kH,
                         const Text(
-                          'Full Name',
+                          'Pickup Date',
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 8.0),
+                        8.kH,
                         TextFormField(
-                          controller: _fullNameController,
+                          controller: _pickupDateController,
+                          // keyboardType: TextInputType.datetime,
                           decoration: const InputDecoration(
-                            hintText: 'Enter Full Name',
+                            hintText: 'Select Pickup Date',
                             border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.calendar_today),
                           ),
+                          readOnly: true,
                           style: const TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
                           ),
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (pickedDate != null) {
+                              // Format the selected date (you can use intl package for custom formats)
+                              String formattedDate =
+                                  "${pickedDate.month}/${pickedDate.day}/${pickedDate.year}";
+                              setState(() {
+                                _pickupDateController.text = formattedDate; // Set the formatted date
+                              });
+                            }
+                          },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your full name';
+                              return 'Please enter the pickup date';
                             }
                             return null;
                           },
                         ),
-                        const SizedBox(height: 24.0),
+                        24.kH,
                         const Text(
-                          'Are you a Student or Parent/Family Member',
+                          'Drop Date',
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 8.0),
-                        Wrap(
-                          spacing: 24.0,
-                          runSpacing: 8.0,
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Radio<int>(
-                                  value: 2,
-                                  groupValue: _role,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _role = value ?? 2;
-                                    });
-                                  },
-                                ),
-                                const Text('Student'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Radio<int>(
-                                  value: 3,
-                                  groupValue: _role,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _role = value ?? 3;
-                                    });
-                                  },
-                                ),
-                                const Text('Parent/Family Member'),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24.0),
-                        const Text(
-                          'Student Email',
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 8.0),
+                        8.kH,
                         TextFormField(
-                          controller: _emailController,
+                          controller: _dropDateController,
+                          // keyboardType: TextInputType.datetime,
                           decoration: const InputDecoration(
-                            hintText: 'Email Address',
+                            hintText: 'Select Drop Date',
                             border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.calendar_today),
                           ),
+                          readOnly: true,
                           style: const TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
                           ),
+                          onTap: () async {
+                            DateTime? dropDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (dropDate != null) {
+                              // Format the selected date (you can use intl package for custom formats)
+                              String formattedDate =
+                                  "${dropDate.month}/${dropDate.day}/${dropDate.year}";
+                              setState(() {
+                                _dropDateController.text = formattedDate; // Set the formatted date
+                              });
+                            }
+                          },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
+                              return 'Please enter the pickup date';
                             }
                             return null;
                           },
-                        ),
-                        const SizedBox(height: 24.0),
-                        const Text(
-                          'Parent/Family Member Email',
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 8.0),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: const InputDecoration(
-                            hintText: 'Email Address',
-                            border: OutlineInputBorder(),
-                          ),
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter the parent or family member email';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 24.0),
+                        ),                        
+                        24.kH,
                         const Text(
                           'Location',
                           style: TextStyle(
@@ -293,7 +255,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 8.0),
+                        8.kH,
                         Container(
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -335,7 +297,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                             ),
                           ),
                         ),
-                        const SizedBox(height: 24.0),
+                        24.kH,
                         const Text(
                           'Apartment',
                           style: TextStyle(
@@ -343,7 +305,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 8.0),
+                        8.kH,
                         DropdownButtonFormField<String>(
                           value: selectedApartment,
                           items: Constant.apartmentList.map((apartment) {
@@ -368,7 +330,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                             contentPadding: EdgeInsets.symmetric(horizontal: 10),
                           ),
                         ),
-                        const SizedBox(height: 24.0),
+                        24.kH,
                         const Text(
                           'Payment Method',
                           style: TextStyle(
@@ -376,7 +338,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 8.0),
+                        8.kH,
                         DropdownButtonFormField<String>(
                           value: _selectedPayment,
                           items: Constant.paymentList.map((payment) {
@@ -401,41 +363,41 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                             contentPadding: EdgeInsets.symmetric(horizontal: 10),
                           ),
                         ),
-                        const SizedBox(height: 32.0),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState?.validate() ?? false) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const ReservationDetailScreen()),
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: ColorConstants.primaryColor,
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              textStyle: const TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.bold,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            child: const Text('Reserve',
-                            style: TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 32.0),
+                        32.kH,
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   child: ElevatedButton(
+                        //     onPressed: () {
+                        //       if (_formKey.currentState?.validate() ?? false) {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //               builder: (context) => const ReservationDetailScreen()),
+                        //         );
+                        //       }
+                        //     },
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: ColorConstants.primaryColor,
+                        //       padding: const EdgeInsets.symmetric(vertical: 15),
+                        //       textStyle: const TextStyle(
+                        //         fontSize: 18,
+                        //         fontFamily: 'Inter',
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(4),
+                        //       ),
+                        //     ),
+                        //     child: const Text('Reserve',
+                        //     style: TextStyle(
+                        //     fontSize: 14.0,
+                        //     fontWeight: FontWeight.w500,
+                        //     color: Colors.white,
+                        //   ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // 32.kH,
                       ],
                     ),
                   ),

@@ -1,4 +1,4 @@
-import 'package:boxed_project/views/PortalScreens/reservation_screen.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_confirm_detailed_screen.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
 import 'package:flutter/material.dart';
 
@@ -101,7 +101,9 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const ReservationScreen()),
+                                        // builder: (context) => const ReservationScreen()),
+                                        builder: (context) => const ReservationConfirmDetailedScreen()),
+
                                   );
                               },
                               style: ElevatedButton.styleFrom(
