@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->foreignId('reservation_id')->constrained('reservations');
-            $table->string('card_number', 20);
-            $table->string('expiration_date', 5);
-            $table->string('cvc', 3);
-            $table->string('country', 50);
-            $table->string('zip_code', 10);
+            $table->string('card_number', 20)->nullable();
+            $table->string('expiration_date', 5)->nullable();
+            $table->string('cvc', 3)->nullable();
+            $table->string('country', 50)->nullable();
+            $table->string('zip_code', 10)->nullable();
             $table->enum('payment_status', ['completed', 'failed']);
         });
     }

@@ -63,7 +63,8 @@ dependencies:
   provider: ^6.1.2
   font_awesome_flutter: ^10.1.0
   http: ^1.2.2
-  flutter_stripe: ^9.0.0
+  flutter_stripe: ^10.2.0
+  flutter_stripe_web: ^5.1.0
   flutter_secure_storage: ^9.2.2
 dev_dependencies:
   flutter_test:

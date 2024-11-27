@@ -70,9 +70,9 @@ class AuthController extends Controller
         $user['token'] = $user->createToken('Personal Access Token')->accessToken;
 
         // registration payment
-        $input = $request->toArray();
-        $input['amount'] = 50;
-        $input['type'] = 'registration';
+        // $input = $request->toArray();
+        // $input['amount'] = 50;
+        // $input['type'] = 'registration';
 
         // $payment = $this->payment($input);
         // if($payment) {

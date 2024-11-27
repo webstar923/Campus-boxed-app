@@ -24,54 +24,52 @@ class ReservationController {
     return 'Unknown';
   }
 
-  Future<String?> submitReservation(Reservation reservation) async {
+  Future<String?> submitReservation(Reservation reservation, String paymentID) async {
 
     UserModel? user = authProvider.user;
+//-----------------------Customized Card Form Case ----------------------//
+    // try {
+    //   final cardDetails = CardDetails(
+    //     number: reservation.cardNumber.trim(),
+    //     expirationMonth: int.parse(reservation.expirationDate.split('/')[0]),
+    //     expirationYear: int.parse('20${reservation.expirationDate.split('/')[1]}'),
+    //     cvc: reservation.securityCode.trim(),
+    //   );
+    //   final address = Address(
+    //     city: 'Houston',
+    //     country: 'US',
+    //     line1: '1459  Circle Drive',
+    //     line2: '',
+    //     state: 'Texas',
+    //     postalCode: '77063',
+    //   );
 
-    Stripe.publishableKey = 'pk_test_51QLScCP4rijKUpt7b3LcmDX59k00wkvss47atJYlv82PukIuQlkNW22swM1bT8txLpYUFOO0Wnxp0LY3F8zKUsAQ00RUPnWycT';
-    // Extract card details
-    // final cardDetails = CardDetails(
-    //   number: reservation.cardNumber.trim(),
-    //   expirationMonth: int.parse(reservation.expirationDate.split('/')[0]),
-    //   expirationYear: int.parse('20${reservation.expirationDate.split('/')[1]}'),
-    //   cvc: reservation.securityCode.trim(),
+    // final paymentMethod = await Stripe.instance.createPaymentMethod(
+    //   params: PaymentMethodParams.card(
+    //     paymentMethodData: PaymentMethodData(
+    //       billingDetails: BillingDetails(
+    //         email: reservation.cardEmail.trim(),
+    //         address: address,
+    //       ),
+    //     ),
+    //   ),
     // );
 
-    try {
-    // Create a Payment Method
-    final paymentMethod = await Stripe.instance.createPaymentMethod(
-      params: PaymentMethodParams.card(
-        paymentMethodData: PaymentMethodData(
-          billingDetails: BillingDetails(
-            email: reservation.cardEmail.trim(),
-            address: Address(
-              country: reservation.country,
-              postalCode: reservation.zipCode,
-              city: '',
-              line1: '',
-              line2: '',
-              state: ''
-            ),
-          ),
-        ),
-      ),
-    );
-
-      print(paymentMethod.id);
-    } catch (e) {
-      print('Error: $e');
-    }
-
+    // } catch (e) {
+    //   print('Error: $e');
+    // }
+//-----------------------Customized Card Form Case ----------------------//
     final url = '${ApiConstants.baseUrl}${ApiConstants.reservations}';
     final body = jsonEncode({
         "storage_box_id": 1,
-        "sender_id": user?.id,
+        // "sender_id": user?.id,
         "receiver_email": reservation.email,
         "receiver_phone": reservation.phoneNumber,
-        "card_number": reservation.cardNumber,
-        "expiration_date": reservation.expirationDate,
-        "cvc": reservation.securityCode,
-        "zip_code": reservation.zipCode,
+        // "card_number": reservation.cardNumber,
+        // "expiration_date": reservation.expirationDate,
+        // "cvc": reservation.securityCode,
+        // "zip_code": reservation.zipCode,
+        "paymentID" : paymentID
         });
     final response = await makeAuthenticatedRequest(url, 'POST', body: body);
     if (response.statusCode == 200) {

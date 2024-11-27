@@ -68,16 +68,16 @@ class _ReserveNowState extends State<ReserveNow> {
       try {
 
         final billingDetails = BillingDetails(
-          email: _reservation.cardEmail,
-          // phone: '+48888000888',
-          // address: Address(
-          //   city: 'Houston',
-          //   country: 'US',
-          //   line1: '1459  Circle Drive',
-          //   line2: '',
-          //   state: 'Texas',
-          //   postalCode: '77063',
-          // ),
+          email: 'email@stripe.com',
+          phone: '+48888000888',
+          address: Address(
+            city: 'Houston',
+            country: 'US',
+            line1: '1459  Circle Drive',
+            line2: '',
+            state: 'Texas',
+            postalCode: '77063',
+          ),
         );
 
         final paymentMethod = await Stripe.instance.createPaymentMethod(
@@ -87,33 +87,21 @@ class _ReserveNowState extends State<ReserveNow> {
                 ),
             )
         );
+
         String? reservedResuilt = await _controller.submitReservation(_reservation,paymentMethod.id);
         setState(() {
           _isLoading = false;
         });
-        if(reservedResuilt == 'Reservation Success')
-        {
-          ScaffoldMessenger.of(context)
-            .showSnackBar(
-              SnackBar(
-                content: Text('The reservation was successful!'),
-                duration: Duration(seconds: 3),
-              )
-            );
-          Go.route(
-            context,
-            const ReservationDetailScreen(),
-          );            
-        }      
+        Go.route(
+          context,
+          const ReservationDetailScreen(),
+        );        
       } catch (error) {
         
         setState(() {
           _isLoading = false;
         });
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $error')));
-        rethrow;        
-        // showAnimatedWarningDialog(context, error.toString());
+        showAnimatedWarningDialog(context, error.toString());
       }
     }
                         
@@ -715,7 +703,7 @@ class _ReserveNowState extends State<ReserveNow> {
                       // ),   
 //----------------------------------------------------- Customized Card Form end-------------------------------------------//                          
 
-                      // 15.kH,
+                      15.kH,
                       CustomButton(
                         onTap:() => {
                           cardFormController.details.complete == true ? _reserve(context) : null
@@ -755,9 +743,7 @@ class _ReserveNowState extends State<ReserveNow> {
                         Container(
                           color: Colors.white.withOpacity(0),
                           child: const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
+                            child: CircularProgressIndicator(),
                           ),
                         ),
                     ],

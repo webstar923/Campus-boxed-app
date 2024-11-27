@@ -5,7 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:provider/provider.dart';
 import 'package:boxed_project/provider/auth_provider.dart';
-void main() {
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:boxed_project/utils/.env.dart';
+void main(){
+
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishableKey;
+  // Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
+  // Stripe.urlScheme = 'flutterstripe';
+  // await Stripe.instance.applySettings();
+
   runApp(
     MultiProvider(
       providers: [

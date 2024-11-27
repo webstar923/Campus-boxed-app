@@ -16,7 +16,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:boxed_project/widgets/custom_icon_button.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 
 class ReserveNow extends StatefulWidget {
 
@@ -31,11 +30,6 @@ class _ReserveNowState extends State<ReserveNow> {
 
   late ReservationController _controller;
   final _formKey = GlobalKey<FormState>();
-
-  //Card Form
-  final cardFormController = CardFormEditController();
-
-  //Old Customized Card Form
   String cardTypeIcon = ''; //Depend CardIcon
   String selectedCountry = 'United States'; // Default country
   final List<String> countries = Constants.countries;
@@ -56,64 +50,26 @@ class _ReserveNowState extends State<ReserveNow> {
 
   void _reserve(context) async {
 
-    if (!cardFormController.details.complete) {
-      return;
-    }
-
     if (_formKey.currentState!.validate() ?? false) {
         setState(() {
           _isLoading = true;
         });
 
       try {
-
-        final billingDetails = BillingDetails(
-          email: _reservation.cardEmail,
-          // phone: '+48888000888',
-          // address: Address(
-          //   city: 'Houston',
-          //   country: 'US',
-          //   line1: '1459  Circle Drive',
-          //   line2: '',
-          //   state: 'Texas',
-          //   postalCode: '77063',
-          // ),
-        );
-
-        final paymentMethod = await Stripe.instance.createPaymentMethod(
-            params: PaymentMethodParams.card(
-                paymentMethodData: PaymentMethodData(
-                  billingDetails: billingDetails,
-                ),
-            )
-        );
-        String? reservedResuilt = await _controller.submitReservation(_reservation,paymentMethod.id);
+        String? reservedResuilt = await _controller.submitReservation(_reservation);
         setState(() {
           _isLoading = false;
         });
-        if(reservedResuilt == 'Reservation Success')
-        {
-          ScaffoldMessenger.of(context)
-            .showSnackBar(
-              SnackBar(
-                content: Text('The reservation was successful!'),
-                duration: Duration(seconds: 3),
-              )
-            );
-          Go.route(
-            context,
-            const ReservationDetailScreen(),
-          );            
-        }      
+        Go.route(
+          context,
+          const ReservationDetailScreen(),
+        );        
       } catch (error) {
         
         setState(() {
           _isLoading = false;
         });
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $error')));
-        rethrow;        
-        // showAnimatedWarningDialog(context, error.toString());
+        showAnimatedWarningDialog(context, error.toString());
       }
     }
                         
@@ -180,15 +136,12 @@ class _ReserveNowState extends State<ReserveNow> {
     }
   }
 
-  void update() => setState(() {});
-
   @override
   void initState() {
     super.initState();
     // Set initial checkbox status based on role
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     _controller = ReservationController(authProvider);
-    cardFormController.addListener(update);
 
   }
 
@@ -196,8 +149,6 @@ class _ReserveNowState extends State<ReserveNow> {
   void dispose() {
     expirationController.dispose();
     cvcController.dispose();
-    cardFormController.removeListener(update);
-    cardFormController.dispose();
     super.dispose();
   }
 
@@ -525,201 +476,184 @@ class _ReserveNowState extends State<ReserveNow> {
                         validator: (value) => value!.isEmpty ? "Enter email" : null,
                       ),
                       15.kH,
-
-                      CardFormField(
-                        controller: cardFormController,
-                        countryCode: 'US',
-                        style: CardFormStyle(
-                          backgroundColor: Colors.white,
-                          borderColor: Colors.blueGrey,
-                          textColor: Colors.black,
-                          placeholderColor: Colors.blue,
-                          borderRadius: 5
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Card Number",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-//----------------------------------------------------- Customized Card Form start-------------------------------------------//                      
-                      // Align(
-                      //   alignment: Alignment.centerLeft, // Aligns text to the left
-                      //   child: Text(
-                      //     "Card Number",
-                      //     style: TextStyle(
-                      //       fontSize: mediumfontsize3,
-                      //       fontWeight: boldfontweight,
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // ),
-                      // 10.kH,
-                      // TextFormField(
-                      //   decoration: InputDecoration(
-                      //     hintText: "1234 1234 1234 1234",
-                      //     filled: true,
-                      //     fillColor: Colors.grey[200],
-                      //     border: const OutlineInputBorder(
-                      //       borderRadius: BorderRadius.all(Radius.circular(5)),
-                      //       borderSide: BorderSide(
-                      //         color: Colors.grey,
-                      //         width: 1.5,
-                      //       ),
-                      //     ),
-                      //     suffixIcon: Icon(getCardIcon(cardTypeIcon)),
-                      //   ),
-                      //   style: TextStyle(
-                      //     fontSize: mediumfontsize3,
-                      //     color: Colors.black,
-                      //     fontWeight: boldfontweight,
-                      //   ),
-                      //   onChanged: (value) {
-                      //     setState(() {
-                      //       _reservation.cardNumber = value;
-                      //       cardTypeIcon = _controller.detectCardType(value);
-                      //     });
-                      //   },
-                      //   validator: (value) => value!.isEmpty ? "Enter CardNumber" : null,
-                      //   inputFormatters: [
-                      //     FilteringTextInputFormatter.digitsOnly,
-                      //     LengthLimitingTextInputFormatter(19), // Allow space-formatted card number
-                      //     TextInputFormatter.withFunction((oldValue, newValue) {
-                      //       final newText = newValue.text.replaceAll(RegExp(r"\D"), "").replaceAllMapped(RegExp(r"(\d{4})(?=\d)"), (match) => "${match[1]} ");
-                      //       return newValue.copyWith(text: newText);
-                      //     }),
-                      //   ],
-                      // ),
-                      // 15.kH,
-                      // Align(
-                      //   alignment: Alignment.centerLeft, // Aligns text to the left
-                      //   child: Text(
-                      //     "Expiration Date",
-                      //     style: TextStyle(
-                      //       fontSize: mediumfontsize3,
-                      //       fontWeight: boldfontweight,
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // ),
-                      // 10.kH,
-                      // TextFormField(
-                      //   controller: expirationController,
-                      //   keyboardType: TextInputType.number,
-                      //   decoration: customInputDecoration('MM/YY'),
-                      //   style: TextStyle(
-                      //     fontSize: mediumfontsize3,
-                      //     color: Colors.black,
-                      //     fontWeight: boldfontweight,
-                      //   ),
-                      //   inputFormatters: [
-                      //     FilteringTextInputFormatter.digitsOnly,
-                      //     LengthLimitingTextInputFormatter(5),
-                      //     TextInputFormatter.withFunction((oldValue, newValue) {
-                      //       _formatExpirationDate(newValue.text);
-                      //       return newValue;
-                      //     }),
-                      //   ],
-                      //   onChanged: (value) => _reservation.expirationDate = value,
-                      //   validator: (value) => value!.isEmpty ? "Enter ExpirationDate" : null,
-                      // ),
-                      // 15.kH,
-                      // Align(
-                      //   alignment: Alignment.centerLeft, // Aligns text to the left
-                      //   child: Text(
-                      //     "Security Code",
-                      //     style: TextStyle(
-                      //       fontSize: mediumfontsize3,
-                      //       fontWeight: boldfontweight,
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // ),
-                      // 10.kH,
-                      // TextFormField(
-                      //   controller: cvcController,
-                      //   keyboardType: TextInputType.number,
-                      //   decoration: InputDecoration(
-                      //     hintText: "CVC",
-                      //     filled: true,
-                      //     fillColor: Colors.grey[200],
-                      //     border: const OutlineInputBorder(
-                      //       borderRadius: BorderRadius.all(Radius.circular(5)),
-                      //       borderSide: BorderSide(
-                      //         color: Colors.grey,
-                      //         width: 1.5,
-                      //       ),
-                      //     ),
-                      //     suffixIcon: Icon(Icons.lock),
-                      //   ),
-                      //   style: TextStyle(
-                      //     fontSize: mediumfontsize3,
-                      //     color: Colors.black,
-                      //     fontWeight: boldfontweight,
-                      //   ),
-                      //   inputFormatters: [
-                      //     FilteringTextInputFormatter.digitsOnly,
-                      //     LengthLimitingTextInputFormatter(
-                      //         4), // Limit to 3 digits
-                      //   ],
-                      //   onChanged: (value) => _reservation.securityCode = value,
-                      //   validator: (value) => value!.isEmpty ? "CVC" : null,
-                      // ),
-                      // 15.kH,
-                      // Align(
-                      //   alignment: Alignment.centerLeft, // Aligns text to the left
-                      //   child: Text(
-                      //     "Country",
-                      //     style: TextStyle(
-                      //       fontSize: mediumfontsize3,
-                      //       fontWeight: boldfontweight,
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // ),
-                      // 10.kH,                      
-                      // DropdownButtonFormField<String>(
-                      //   decoration: customInputDecoration('Country'),
-                      //   value: selectedCountry,
-                      //   onChanged: (String? newCountry) {
-                      //     setState(() {
-                      //       selectedCountry = newCountry!;
-                      //     });
-                      //     _reservation.country = newCountry!;
-                      //   },
-                      //   items: countries.map((country) {
-                      //     return DropdownMenuItem<String>(
-                      //       value: country,
-                      //       child: Text(country),
-                      //     );
-                      //   }).toList(),
-                      //   validator: (value) => value!.isEmpty ? "Choose Country" : null,
-                      // ),
-                      // 15.kH,
-                      // Align(
-                      //   alignment: Alignment.centerLeft, // Aligns text to the left
-                      //   child: Text(
-                      //     "ZIP Code",
-                      //     style: TextStyle(
-                      //       fontSize: mediumfontsize3,
-                      //       fontWeight: boldfontweight,
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // ),
-                      // 10.kH,
-                      // TextFormField(
-                      //   decoration: customInputDecoration('12345'),
-                      //   style: TextStyle(
-                      //     fontSize: mediumfontsize3,
-                      //     color: Colors.black,
-                      //     fontWeight: boldfontweight,
-                      //   ),
-                      //   onChanged: (value) => _reservation.zipCode = value,
-                      //   validator: (value) => value!.isEmpty ? "ZIP Code" : null,
-                      // ),   
-//----------------------------------------------------- Customized Card Form end-------------------------------------------//                          
-
-                      // 15.kH,
-                      CustomButton(
-                        onTap:() => {
-                          cardFormController.details.complete == true ? _reserve(context) : null
+                      10.kH,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "1234 1234 1234 1234",
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                              width: 1.5,
+                            ),
+                          ),
+                          suffixIcon: Icon(getCardIcon(cardTypeIcon)),
+                        ),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            _reservation.cardNumber = value;
+                            cardTypeIcon = _controller.detectCardType(value);
+                          });
                         },
+                        validator: (value) => value!.isEmpty ? "Enter CardNumber" : null,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(19), // Allow space-formatted card number
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            final newText = newValue.text.replaceAll(RegExp(r"\D"), "").replaceAllMapped(RegExp(r"(\d{4})(?=\d)"), (match) => "${match[1]} ");
+                            return newValue.copyWith(text: newText);
+                          }),
+                        ],
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Expiration Date",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      TextFormField(
+                        controller: expirationController,
+                        keyboardType: TextInputType.number,
+                        decoration: customInputDecoration('MM/YY'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(5),
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            _formatExpirationDate(newValue.text);
+                            return newValue;
+                          }),
+                        ],
+                        onChanged: (value) => _reservation.expirationDate = value,
+                        validator: (value) => value!.isEmpty ? "Enter ExpirationDate" : null,
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Security Code",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      TextFormField(
+                        controller: cvcController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: "CVC",
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                              width: 1.5,
+                            ),
+                          ),
+                          suffixIcon: Icon(Icons.lock),
+                        ),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(
+                              4), // Limit to 3 digits
+                        ],
+                        onChanged: (value) => _reservation.securityCode = value,
+                        validator: (value) => value!.isEmpty ? "CVC" : null,
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "Country",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,                      
+                      DropdownButtonFormField<String>(
+                        decoration: customInputDecoration('Country'),
+                        value: selectedCountry,
+                        onChanged: (String? newCountry) {
+                          setState(() {
+                            selectedCountry = newCountry!;
+                          });
+                          _reservation.country = newCountry!;
+                        },
+                        items: countries.map((country) {
+                          return DropdownMenuItem<String>(
+                            value: country,
+                            child: Text(country),
+                          );
+                        }).toList(),
+                        validator: (value) => value!.isEmpty ? "Choose Country" : null,
+                      ),
+                      15.kH,
+                      Align(
+                        alignment: Alignment.centerLeft, // Aligns text to the left
+                        child: Text(
+                          "ZIP Code",
+                          style: TextStyle(
+                            fontSize: mediumfontsize3,
+                            fontWeight: boldfontweight,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      10.kH,
+                      TextFormField(
+                        decoration: customInputDecoration('12345'),
+                        style: TextStyle(
+                          fontSize: mediumfontsize3,
+                          color: Colors.black,
+                          fontWeight: boldfontweight,
+                        ),
+                        onChanged: (value) => _reservation.zipCode = value,
+                        validator: (value) => value!.isEmpty ? "ZIP Code" : null,
+                      ),   
+                      20.kH,
+                      CustomButton(
+                        onTap:() => _reserve(context),
                         height: 55,
                         buttoncolor: Colors.white,
                         borderRadius: BorderRadius.circular(10),
@@ -755,11 +689,17 @@ class _ReserveNowState extends State<ReserveNow> {
                         Container(
                           color: Colors.white.withOpacity(0),
                           child: const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
+                            child: CircularProgressIndicator(),
                           ),
                         ),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     if (_formKey.currentState!.validate()) {
+                      //       _controller.submitReservation(_reservation);
+                      //     }
+                      //   },
+                      //   child: const Text('Reserve Now'),
+                      // ),
                     ],
                   ),
                 ),
