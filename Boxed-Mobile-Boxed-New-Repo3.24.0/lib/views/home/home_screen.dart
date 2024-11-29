@@ -20,6 +20,11 @@ import 'package:provider/provider.dart';
 import 'package:boxed_project/provider/auth_provider.dart';
 import 'package:boxed_project/views/reservation/reserve_now.dart';
 import 'package:boxed_project/views/auth/signup_screen.dart';
+import 'package:boxed_project/views/widget/loading_button.dart';
+import 'package:boxed_project/views/widget/customsnapbar.dart';
+import 'package:boxed_project/controllers/notification_controller.dart';
+import 'package:boxed_project/route_structure/go_navigator.dart';
+import 'package:boxed_project/route_structure/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,97 +40,112 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectPayment = 0;
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  late NotificationController _notificationController;
+
+  @override
+  void initState() {
+    super.initState();
+     _notificationController = NotificationController();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     bool isLoggedIn = Provider.of<AuthProvider>(context).isLoggedIn;
 
-    return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () async {
+        Go.named(context, RouteName.welcomeScreen);
+        return false;
+      },
+      child: Scaffold(
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
 
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _SliverPersistentHeaderDelegate(
-                minHeight: 60,
-                maxHeight: 60,
-                child: Container(
-                  color: Palette.themecolor,
-                  child: Padding(
-                    // padding: const EdgeInsets.symmetric(horizontal: 20),
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              Constants.splashLogo,
-                              width: 200,
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverPersistentHeaderDelegate(
+                  minHeight: 60,
+                  maxHeight: 60,
+                  child: Container(
+                    color: Palette.themecolor,
+                    child: Padding(
+                      // padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Image.asset(
+                                Constants.splashLogo,
+                                width: 200,
+                              ),
                             ),
                           ),
-                        ),
-                        CustomIconButton(
-                          onTap: () {},
-                          child: const Icon(
-                            CupertinoIcons.bell,
-                            color: Colors.white,
+                          CustomIconButton(
+                            onTap: () {},
+                            child: const Icon(
+                              CupertinoIcons.bell,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            // Divider(),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _SliverPersistentHeaderDelegate(
-                minHeight: 60,
-                maxHeight: 60,
-                child: Container(
-                  color: Palette.themecolor,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (isLoggedIn) {
-                          Go.route(
-                            context,
-                            const ReserveNow(),
-                          );
-                        } else {
-                          Go.route(
-                            context,
-                            const SignupScreen(),
-                          );
-                        }
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF004BA0), // Button color
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.white),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 5,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "RESERVE NOW",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+              // Divider(),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverPersistentHeaderDelegate(
+                  minHeight: 60,
+                  maxHeight: 60,
+                  child: Container(
+                    color: Palette.themecolor,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (isLoggedIn) {
+                            Go.route(
+                              context,
+                              const ReserveNow(),
+                            );
+                          } else {
+                            Go.route(
+                              context,
+                              const SignupScreen(),
+                            );
+                          }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF004BA0), // Button color
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.white),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "RESERVE NOW",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
@@ -134,66 +154,66 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-            ),
-            // SliverAppBar with flexible background
-            SliverAppBar(
-              surfaceTintColor: Palette.themecolor,
-              backgroundColor: Palette.themecolor,
-              pinned: false,
-              expandedHeight: 300,
-              elevation: 2,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(10),
-                ),
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                background: FilledBox(
-                  width: double.infinity,
-                  padding: EdgeInsets.zero,
-                  image: const DecorationImage(
-                    image: AssetImage("assets/images/background.png"),
-                    fit: BoxFit.cover,
+              // SliverAppBar with flexible background
+              SliverAppBar(
+                surfaceTintColor: Palette.themecolor,
+                backgroundColor: Palette.themecolor,
+                pinned: false,
+                expandedHeight: 300,
+                elevation: 2,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(10),
                   ),
-                  borderRadius: BorderRadius.circular(0),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
+                ),
+                flexibleSpace: FlexibleSpaceBar(
+                  background: FilledBox(
+                    width: double.infinity,
+                    padding: EdgeInsets.zero,
+                    image: const DecorationImage(
+                      image: AssetImage("assets/images/background.png"),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          10.kH,
+                          banners(size), // Custom banner widget
+                          10.kH,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),];
+          },
+
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        10.kH,
-                        banners(size), // Custom banner widget
-                        10.kH,
+                        setReminderWidget(),
+                        howWeWork(),
+                        SchoolsWeServeWidget(),
+                        TrustedPartner(),
+                        SelfMove(),
+                        Servey(),
+                        setReminderWidget(),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ),];
-        },
-
-        body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      setReminderWidget(),
-                      howWeWork(),
-                      SchoolsWeServeWidget(),
-                      TrustedPartner(),
-                      SelfMove(),
-                      Servey(),
-                      setReminderWidget(),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
+      )
     );
   }
 
@@ -213,46 +233,11 @@ class _HomeScreenState extends State<HomeScreen> {
               'assets/images/banner3.png',
             ],
             height: size.height / 100 * 40,
-            // image size error issue
             isNetworkImage: false,
             useShadow: false,
             isShowIndicator: true,
             indicatorPositionBottom: -180,
           ),
-          // Center(
-          //   child: FilledBox(
-          //     height: size.height / 100 * 45,
-          //     width: size.width / 100 * 75,
-          //     padding: EdgeInsets.zero,
-          //     borderRadius: BorderRadius.circular(12),
-          //     color: themewhitecolor,
-          //     image: const DecorationImage(
-          //       image: AssetImage(
-          //         "assets/images/banner-1.png",
-          //       ),
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          // ),
-          // 30.kH,
-          // CustomButton(
-          //   onTap: () {
-          //     Go.route(
-          //       context,
-          //       const ReserveNow(),
-          //     );
-          //   },
-          //   height: 60,
-          //   buttoncolor: themewhitecolor,
-          //   child: const Text(
-          //     "Reserve Now",
-          //     style: TextStyle(
-          //       fontSize: mediumfontsize1,
-          //       color: Palette.themecolor,
-          //       fontWeight: boldfontweight,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -310,6 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     keyboardType: TextInputType.phone,
                     style: const TextStyle(
+                        fontSize: mediumfontsize5,
                         fontWeight: normalfontweightvar1, // Set font weight to normal
                     ),
                   ),
@@ -327,34 +313,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     keyboardType: TextInputType.emailAddress,
                     style: const TextStyle(
+                        fontSize: mediumfontsize5,
                         fontWeight: normalfontweightvar1, // Set font weight to normal
-                    ), 
+                    ),
                   ),
                 ),
-                20.kH,
+                // 20.kH,
                 // "Remind Me" Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add reminder functionality here
-                      print("Reminder set for ${_phoneController.text}, ${_emailController.text}");
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: LoadingButton(
+                    onPressed: () async {
+                      if(_emailController.text != '' && _phoneController.text != ''){
+                          await _notificationController.registerNotificationUser(_emailController.text,_phoneController.text);
+                          CustomSnackBar.show(context, 'Success: Notification Registered');
+                      }
+                      else{
+                          CustomSnackBar.show(context, 'Enter Email and Phone Number');
+                      }
                     },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      backgroundColor: Palette.themecolor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // Small border radius for the button
-                      ),
-                    ),
-                    child: const Text(
-                      "Remind Me",
-                      style: TextStyle(
-                        fontSize: 20, // Text size
-                        color: Colors.white, // Text color
-                        fontWeight: boldfontweight, // Regular font style
-                      ),
-                    ),
+                    text: 'Remind Me',
                   ),
                 ),
               ],
@@ -451,3 +429,4 @@ class _SliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     return true;
   }
 }
+

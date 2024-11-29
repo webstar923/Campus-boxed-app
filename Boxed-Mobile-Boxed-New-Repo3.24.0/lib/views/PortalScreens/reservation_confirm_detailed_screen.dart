@@ -7,8 +7,10 @@ import 'package:boxed_project/theme/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:boxed_project/Utility/constant.dart';
+import 'package:boxed_project/theme/font_structures.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
 import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dart';
+import 'package:boxed_project/views/widget/customsnapbar.dart';
 
 class ReservationConfirmDetailedScreen extends StatefulWidget {
   const ReservationConfirmDetailedScreen({super.key});
@@ -21,6 +23,8 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
   final _formKey = GlobalKey<FormState>();
   final _pickupDateController = TextEditingController();
   final _dropDateController = TextEditingController();
+  final _pickupLocationController = TextEditingController();
+  final _deliveryLocationController = TextEditingController();
   final _customLocationController = TextEditingController();
   String? selectedLocation;
   String? selectedApartment;
@@ -32,17 +36,15 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    fetchUserDetails();
+    fetchReservationDetails();
   }
 
-  Future<void> fetchUserDetails() async {
+  Future<void> fetchReservationDetails() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showLoadingDialog(context);
     });
 
     void callback(String responseBody, {bool isError = false}) {
-      print('Response Body: $responseBody');
-
       try {
         Map<String, dynamic> jsonResponse = jsonDecode(responseBody);
 
@@ -51,53 +53,80 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
           if (mounted) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               hideLoadingDialog(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    message,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.red,
-                ),
-              );
+              CustomSnackBar.show(context, message);
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       message,
+              //       style: const TextStyle(color: Colors.white),
+              //     ),
+              //     backgroundColor: Colors.red,
+              //   ),
+              // );
             });
           }
         } else {
           Map<String, dynamic> data = jsonResponse['data'];
           String message = jsonResponse['message'] ?? 'Data fetched successfully!';
           String apiSelectedLocation = data['location'] ?? '';
+          String pickupTime  = data['pickup_time'] ?? '';
+          String dropoffTime = data['dropoff_time'] ?? '';
+          String pickupLocation   = data['pickup_location'] ?? '';
+          String deliveryLocation = data['delivery_location'] ?? '';
 
           setState(() {
-            if (Constant.schoolList.contains(apiSelectedLocation)) {
-              selectedLocation = apiSelectedLocation;
-              _isCustomLocation = false;
-            } else {
-              _isCustomLocation = true;
-              _customLocationController.text = apiSelectedLocation;
-              selectedLocation = Constant.schoolList.isNotEmpty ? Constant.schoolList.first : null;
-            }
+            // if (Constant.schoolList.contains(apiSelectedLocation)) {
+            //   selectedLocation = apiSelectedLocation;
+            //   _isCustomLocation = false;
+            // } else {
+            //   _isCustomLocation = true;
+            //   _customLocationController.text = apiSelectedLocation;
+            //   selectedLocation = Constant.schoolList.isNotEmpty ? Constant.schoolList.first : null;
+            // }
 
-            selectedApartment = Constant.apartmentList.contains(data['apartment'])
-                ? data['apartment']
-                : (Constant.apartmentList.isNotEmpty ? Constant.apartmentList.first : null);
-            _selectedPayment = Constant.paymentList.contains(data['payment'])
-                ? data['payment']
-                : (Constant.paymentList.isNotEmpty ? Constant.paymentList.first : null);
-            _role = data['role'] == 2 ? 2 : 3; 
+            // selectedApartment = Constant.apartmentList.contains(data['apartment'])
+            //     ? data['apartment']
+            //     : (Constant.apartmentList.isNotEmpty ? Constant.apartmentList.first : null);
+            // _selectedPayment = Constant.paymentList.contains(data['payment'])
+            //     ? data['payment']
+            //     : (Constant.paymentList.isNotEmpty ? Constant.paymentList.first : null);
+            // _role = data['role'] == 2 ? 2 : 3;
+
+            try {
+              // Parse pickup time
+              DateTime parsedPickupTime = DateTime.parse(pickupTime);
+              String formattedPickupTime =
+                  "${parsedPickupTime.month}/${parsedPickupTime.day}/${parsedPickupTime.year}";
+              _pickupDateController.text = formattedPickupTime;
+
+              // Parse drop-off time
+              DateTime parsedDropoffTime = DateTime.parse(dropoffTime);
+              String formattedDropoffTime =
+                  "${parsedDropoffTime.month}/${parsedDropoffTime.day}/${parsedDropoffTime.year}";
+              _dropDateController.text = formattedDropoffTime;
+            } catch (e) {
+              print("Error parsing dates: $e");
+              _pickupDateController.text = "Invalid date";
+              _dropDateController.text = "Invalid date";
+            }
+            _pickupLocationController.text   = pickupLocation;
+            _deliveryLocationController.text = deliveryLocation;
+
           });
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
               hideLoadingDialog(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    message,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              CustomSnackBar.show(context, message);
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(
+              //       message,
+              //       style: const TextStyle(color: Colors.white),
+              //     ),
+              //     backgroundColor: Colors.green,
+              //   ),
+              // );
             }
           });
         }
@@ -106,21 +135,22 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             hideLoadingDialog(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'An error occurred: $e',
-                  style: const TextStyle(color: Colors.white),
-                ),
-                backgroundColor: Colors.red,
-              ),
-            );
+            CustomSnackBar.show(context, 'An error occurred: $e');
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text(
+            //       'An error occurred: $e',
+            //       style: const TextStyle(color: Colors.white),
+            //     ),
+            //     backgroundColor: Colors.red,
+            //   ),
+            // );
           });
         }
       }
     }
     // Temporary Stopped Part
-    await ApiService(context).getUserDetails(callback);
+    await ApiService(context).getReservationDetails(callback);
   }
 
   @override
@@ -204,7 +234,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                         ),
                         24.kH,
                         const Text(
-                          'Drop Date',
+                          'Drop off Date',
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
@@ -249,121 +279,134 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                         ),                        
                         24.kH,
                         const Text(
-                          'Location',
-                          style: TextStyle(
-                            fontSize: 11.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        8.kH,
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey, // Border color
-                            ),
-                            borderRadius: BorderRadius.circular(4), // Rounded corners
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButtonFormField<String>(
-                              value: selectedLocation,
-                              items: Constant.schoolList.map((location) {
-                                return DropdownMenuItem<String>(
-                                  value: location,
-                                  child: Text(
-                                    location,
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    overflow: TextOverflow.ellipsis, // Handle text overflow
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedLocation = value;
-                                  _isCustomLocation = selectedLocation == 'Custom';
-                                  if (_isCustomLocation) {
-                                    _customLocationController.text = '';
-                                  }
-                                });
-                              },
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                                border: InputBorder.none, // Remove default border
-                              ),
-                              icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
-                              isExpanded: true, // Make the dropdown fill the container width
-                            ),
-                          ),
-                        ),
-                        24.kH,
-                        const Text(
-                          'Apartment',
+                          'Pickup Location',
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         8.kH,
-                        DropdownButtonFormField<String>(
-                          value: selectedApartment,
-                          items: Constant.apartmentList.map((apartment) {
-                            return DropdownMenuItem<String>(
-                              value: apartment,
-                              child: Text(
-                                apartment,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedApartment = value;
-                            });
-                          },
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                          ),
+                        TextFormField(
+                          controller: _pickupLocationController,
+                          decoration: customInputDecoration('your location'),
+                          // onChanged: (value) => _reservation.cardEmail = value,
+                          validator: (value) => value!.isEmpty ? "Enter your location" : null,
                         ),
+                        // Container(
+                        //   decoration: BoxDecoration(
+                        //     border: Border.all(
+                        //       color: Colors.grey, // Border color
+                        //     ),
+                        //     borderRadius: BorderRadius.circular(4), // Rounded corners
+                        //   ),
+                        //   child: DropdownButtonHideUnderline(
+                        //     child: DropdownButtonFormField<String>(
+                        //       value: selectedLocation,
+                        //       items: Constant.schoolList.map((location) {
+                        //         return DropdownMenuItem<String>(
+                        //           value: location,
+                        //           child: Text(
+                        //             location,
+                        //             style: const TextStyle(
+                        //               fontSize: 14.0,
+                        //               fontWeight: FontWeight.w500,
+                        //             ),
+                        //             overflow: TextOverflow.ellipsis, // Handle text overflow
+                        //           ),
+                        //         );
+                        //       }).toList(),
+                        //       onChanged: (value) {
+                        //         setState(() {
+                        //           selectedLocation = value;
+                        //           _isCustomLocation = selectedLocation == 'Custom';
+                        //           if (_isCustomLocation) {
+                        //             _customLocationController.text = '';
+                        //           }
+                        //         });
+                        //       },
+                        //       decoration: InputDecoration(
+                        //         contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                        //         border: InputBorder.none, // Remove default border
+                        //       ),
+                        //       icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
+                        //       isExpanded: true, // Make the dropdown fill the container width
+                        //     ),
+                        //   ),
+                        // ),
                         24.kH,
                         const Text(
-                          'Payment Method',
+                          'Delivery Location',
                           style: TextStyle(
                             fontSize: 14.0,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         8.kH,
-                        DropdownButtonFormField<String>(
-                          value: _selectedPayment,
-                          items: Constant.paymentList.map((payment) {
-                            return DropdownMenuItem<String>(
-                              value: payment,
-                              child: Text(
-                                payment,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedPayment = value;
-                            });
-                          },
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                          ),
+                        TextFormField(
+                          controller: _deliveryLocationController,
+                          decoration: customInputDecoration('delivery location'),
+                          // onChanged: (value) => _reservation.cardEmail = value,
+                          validator: (value) => value!.isEmpty ? "Enter deliver location" : null,
                         ),
-                        32.kH,
+                        8.kH,
+                        // DropdownButtonFormField<String>(
+                        //   value: selectedApartment,
+                        //   items: Constant.apartmentList.map((apartment) {
+                        //     return DropdownMenuItem<String>(
+                        //       value: apartment,
+                        //       child: Text(
+                        //         apartment,
+                        //         style: const TextStyle(
+                        //           fontSize: 14.0,
+                        //           fontWeight: FontWeight.w500,
+                        //         ),
+                        //       ),
+                        //     );
+                        //   }).toList(),
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       selectedApartment = value;
+                        //     });
+                        //   },
+                        //   decoration: const InputDecoration(
+                        //     border: OutlineInputBorder(),
+                        //     contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        //   ),
+                        // ),
+                        // 24.kH,
+                        // const Text(
+                        //   'Payment Method',
+                        //   style: TextStyle(
+                        //     fontSize: 14.0,
+                        //     fontWeight: FontWeight.w500,
+                        //   ),
+                        // ),
+                        // 8.kH,
+                        // DropdownButtonFormField<String>(
+                        //   value: _selectedPayment,
+                        //   items: Constant.paymentList.map((payment) {
+                        //     return DropdownMenuItem<String>(
+                        //       value: payment,
+                        //       child: Text(
+                        //         payment,
+                        //         style: const TextStyle(
+                        //           fontSize: 14.0,
+                        //           fontWeight: FontWeight.w500,
+                        //         ),
+                        //       ),
+                        //     );
+                        //   }).toList(),
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       _selectedPayment = value;
+                        //     });
+                        //   },
+                        //   decoration: const InputDecoration(
+                        //     border: OutlineInputBorder(),
+                        //     contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        //   ),
+                        // ),
+                        // 32.kH,
                         // SizedBox(
                         //   width: double.infinity,
                         //   child: ElevatedButton(
@@ -409,4 +452,20 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
       ),
     );
   }
+
+  InputDecoration customInputDecoration(String labelText) {
+    return InputDecoration(
+      hintText: labelText,
+      // filled: true,
+      // fillColor: Colors.grey[200],
+      border: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        borderSide: BorderSide(
+          // color: Colors.grey,
+          // width: 1.5,
+        ),
+      ),
+    );
+  }
+
 }

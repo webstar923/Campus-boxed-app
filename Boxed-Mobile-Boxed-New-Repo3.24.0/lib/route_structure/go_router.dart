@@ -7,6 +7,7 @@ import 'package:boxed_project/views/splash/splash_screen.dart';
 import 'package:boxed_project/views/welcome/welcome_screen.dart';
 import 'package:boxed_project/widgets/error_screen.dart';
 import 'package:boxed_project/views/reservation/reserve_now.dart';
+import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,7 +16,8 @@ class RouteName {
   static const String welcomeScreen = 'welcome';
   static const String loginScreen = 'login';
   static const String signupScreen = 'sign-up';
-  static const String reserveNowScreen = 'reservenow';  
+  static const String reserveNowScreen = 'reservenow';
+  static const String reserveDetailScreen = 'reservedetailscreen';
   static const String forgotPasswordScreen = 'forgot-password';
   static const String navbar = 'nav-bar';
   static const String homeScreen = 'home';
@@ -103,15 +105,15 @@ class RouteName {
           );
         },
       ),      
-      // GoRoute(
-      //   path: '/$categorieScreen',
-      //   name: categorieScreen,
-      //   pageBuilder: (context, state) {
-      //     return const MaterialPage(
-      //       child: CategoriesScreen(),
-      //     );
-      //   },
-      // ),
+      GoRoute(
+        path: '/$reserveDetailScreen',
+        name: reserveDetailScreen,
+        pageBuilder: (context, state) {
+          return const MaterialPage(
+            child: ReservationDetailScreen(),
+          );
+        },
+      ),
       // GoRoute(
       //   path: '/$chatScreen',
       //   name: chatScreen,

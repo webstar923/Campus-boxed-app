@@ -10,6 +10,7 @@ use App\Traits\{ApiResponsesTrait, PaymentTrait};
 use Carbon\Carbon;
 use Auth, Hash, Validator, Mail, Str;
 use App\Models\User;
+use App\Models\Reservation;
 use App\Mail\OtpMail;
 
 class AuthController extends Controller
@@ -34,7 +35,10 @@ class AuthController extends Controller
 
         $user = Auth::user();
         $user['token'] = $user->createToken('Personal Access Token')->accessToken;
-
+        $existingReservation = Reservation::where('user_id', $user['id'])
+                    ->where('status', '!=', 7)
+                    ->exists();
+        $user['reservationExist'] = $existingReservation ? 'true' : 'false';
         return $this->success($user, "Logged in");
     }
 

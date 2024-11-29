@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:boxed_project/http/api_constant.dart';
+import 'package:boxed_project/http/api_client.dart';
 
 class ReservationDetailSlider extends StatefulWidget {
   const ReservationDetailSlider({Key? key}) : super(key: key);
@@ -14,11 +18,13 @@ class _ReservationDetailSliderState extends State<ReservationDetailSlider> {
 
   final storage = FlutterSecureStorage();
   String? _customerId;
+  String? _pickupTime;
 
   @override
   void initState() {
     super.initState();
     _loadCustomerId(); // Load the customer ID when the widget initializes
+    _loadPickupTime(); // Load the pickup Time when the widget initializes
   }
 
   // Function to load customer ID from secure storage
@@ -27,6 +33,22 @@ class _ReservationDetailSliderState extends State<ReservationDetailSlider> {
     setState(() {
       _customerId = customerId; // Update the state with the retrieved value
     });
+  }
+
+  // Function to load Pickup Time from Server
+  Future<void> _loadPickupTime() async {
+    final url  = '${ApiConstants.baseUrl}${ApiConstants.reservations}';
+    final response = await makeAuthenticatedRequest(url, 'GET');
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      if (responseData['success']) {
+        _pickupTime = responseData['data']['pickup_time'];
+      } else {
+        throw Exception(responseData['message']);
+      }
+    } else {
+      throw Exception('Reservation failed: ${response.statusCode}');
+    }
   }
 
   @override
@@ -104,20 +126,20 @@ class _ReservationDetailSliderState extends State<ReservationDetailSlider> {
                                         16.0), // Corner radius for data containers
                                   ),
                                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                  child: const Row(
+                                  child: Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'PickUp Details:',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          '9:30am 5/30/2025',
-                                          style: TextStyle(
+                                          _pickupTime ?? 'Not available',
+                                          style: const TextStyle(
                                             fontSize: 16,
                                           ),
                                           textAlign: TextAlign.right,

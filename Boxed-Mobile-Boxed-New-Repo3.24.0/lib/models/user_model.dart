@@ -11,6 +11,7 @@ class UserModel {
   final int? id;
   final String? password;
   final String? token;
+  final String? reservationExist;
 
   UserModel({
     this.firstName,
@@ -25,6 +26,7 @@ class UserModel {
     this.id,
     this.password,
     this.token,
+    this.reservationExist
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +42,7 @@ class UserModel {
       createdAt: json['created_at'],
       id: json['id'],
       token: json['token'],
+      reservationExist: json['reservationExist'],
     );
   }
 
@@ -57,6 +60,7 @@ class UserModel {
       'id': id,
       'password': password,
       'token': token,
+      'reservation_exist':reservationExist
     };
   }
 }

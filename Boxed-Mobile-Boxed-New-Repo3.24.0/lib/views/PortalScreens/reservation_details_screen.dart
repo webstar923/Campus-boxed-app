@@ -9,6 +9,8 @@ import 'package:boxed_project/views/PortalScreens/reservation_confirm_detailed_s
 import 'package:boxed_project/views/PortalScreens/customer_status_view.dart';
 import 'package:boxed_project/views/PortalScreens/order_material_screen.dart';
 import 'package:boxed_project/views/PortalScreens/reservation_detail_slider.dart';
+import 'package:boxed_project/route_structure/go_navigator.dart';
+import 'package:boxed_project/route_structure/go_router.dart';
 
 class ReservationDetailScreen extends StatefulWidget {
   const ReservationDetailScreen({super.key});
@@ -48,185 +50,192 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
     );
   }
 
-    return Column(
-      children: [
-        Container(
-          height: 130 +
-              MediaQuery.of(context)
-                  .padding
-                  .top, // Add status bar height to the container height
-          color: ColorConstants.primaryColor,
-          child: Stack(
-            children: [
-              Positioned(
-                top: MediaQuery.of(context).padding.top,
-                left: 0,
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0, bottom: 15.0),
-                  child: Image.asset(
-                    'assets/images/boxed_logo.png',
-                    height: 67,
-                    width: 212,
+    // ignore: deprecated_member_use
+    return  WillPopScope(
+      onWillPop: () async {
+        Go.named(context, RouteName.welcomeScreen);
+        return false;
+      },
+      child:Column(
+        children: [
+          Container(
+            height: 130 +
+                MediaQuery.of(context)
+                    .padding
+                    .top, // Add status bar height to the container height
+            color: ColorConstants.primaryColor,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: MediaQuery.of(context).padding.top,
+                  left: 0,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            children: const [
-              Center(child: ReservationDetailSlider()),
-              Center(child: ReservationConfirmDetailedScreen()),
-              Center(child: OrderMaterialScreen()),
-              Center(child: LabelItemScreen()),
-              Center(child: PickupView()),
-              Center(child: CustomerStatusView()),
-            ],
-          ),
-        ),
-        Column(
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    buildStepIndicator(true, 'Reserve', 0),
-                    buildLine(0 < _currentIndex),
-                    // buildStepIndicator(0 < _currentIndex, 'Order Materials', 1),
-                    buildStepIndicator(0 < _currentIndex, 'Confirm Details', 1),
-                    buildLine(1 < _currentIndex),
-                    buildStepIndicator(1 < _currentIndex, 'Order Materials', 2),
-                    buildLine(2 < _currentIndex),
-                    buildStepIndicator(2 < _currentIndex, 'Label Items', 3),
-                    buildLine(3 < _currentIndex),
-                    buildStepIndicator(3 < _currentIndex, 'Check In', 4),
-                    buildLine(4 < _currentIndex),
-                    buildStepIndicator(4 < _currentIndex, 'Confirm Pick Up', 5),
-                  ],
-                )),
-            // Added space between indicators and labels
-
-            Row(
-              children: [
-                SizedBox(
-                    width: screenWidth / 6,
-                    child: const Text('Reserve',
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                        style: TextStyle(
-                          fontSize: 12, // Adjust font size as needed
-                          fontWeight:
-                              FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.white, // Adjust color as needed
-                        ))),
-                SizedBox(
-                    width: screenWidth / 6,
-                    child: const Text('Confirm\nDetails',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12, // Adjust font size as needed
-                          fontWeight:
-                              FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.white, // Adjust color as needed
-                        ))),
-                SizedBox(
-                    width: screenWidth / 6,
-                    child: const Text('Order\nMaterials',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12, // Adjust font size as needed
-                          fontWeight:
-                              FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.white, // Adjust color as needed
-                        ))),
-                SizedBox(
-                    width: screenWidth / 6,
-                    child: const Text('Label\nItems',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12, // Adjust font size as needed
-                          fontWeight:
-                              FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.white, // Adjust color as needed
-                        ))),
-                SizedBox(
-                    width: screenWidth / 6,
-                    child: const Text('Check\nIn',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12, // Adjust font size as needed
-                          fontWeight:
-                              FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.white, // Adjust color as needed
-                        ))),
-                SizedBox(
-                    width: screenWidth / 6,
-                    child: const Text('Confirm\nPick Up',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12, // Adjust font size as needed
-                          fontWeight:
-                              FontWeight.w300, // Adjust font weight as needed
-                          color: Colors.white, // Adjust color as needed
-                        ))),
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16.0, bottom: 15.0),
+                    child: Image.asset(
+                      'assets/images/boxed_logo.png',
+                      height: 67,
+                      width: 212,
+                    ),
+                  ),
+                ),
               ],
             ),
-            10.kH,
-              OutlinedButton(
-                onPressed: () {
-                  setState(() {
-                    if (_currentIndex == 2 && item.length <= 0) {
-                      _showAlertDialog(context);
-                    } else {
-                      if (_currentIndex < 5) {
-                        _currentIndex = _currentIndex + 1;
-                        _pageController.animateToPage(
-                          _currentIndex,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
-                    }
-                  });
-                },
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color.fromRGBO(1, 33, 105, 1),
-                  side: const BorderSide(color: Color.fromRGBO(1, 33, 105, 1)),
-                  padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 7.0),
-                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                child: const Text('Next Step',
-                  style: TextStyle(
-                    fontSize: 14, // Adjust font size as needed
-                    fontWeight: FontWeight.w400, // Adjust font weight as needed
-                    color: Colors.black, // Adjust color as needed
-                  ),
-                ),
+          ),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              children: const [
+                Center(child: ReservationDetailSlider()),
+                Center(child: ReservationConfirmDetailedScreen()),
+                Center(child: OrderMaterialScreen()),
+                Center(child: LabelItemScreen()),
+                Center(child: PickupView()),
+                Center(child: CustomerStatusView()),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      buildStepIndicator(true, 'Reserve', 0),
+                      buildLine(0 < _currentIndex),
+                      // buildStepIndicator(0 < _currentIndex, 'Order Materials', 1),
+                      buildStepIndicator(0 < _currentIndex, 'Confirm Details', 1),
+                      buildLine(1 < _currentIndex),
+                      buildStepIndicator(1 < _currentIndex, 'Order Materials', 2),
+                      buildLine(2 < _currentIndex),
+                      buildStepIndicator(2 < _currentIndex, 'Label Items', 3),
+                      buildLine(3 < _currentIndex),
+                      buildStepIndicator(3 < _currentIndex, 'Check In', 4),
+                      buildLine(4 < _currentIndex),
+                      buildStepIndicator(4 < _currentIndex, 'Confirm Pick Up', 5),
+                    ],
+                  )),
+              // Added space between indicators and labels
+
+              Row(
+                children: [
+                  SizedBox(
+                      width: screenWidth / 6,
+                      child: const Text('Reserve',
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                          style: TextStyle(
+                            fontSize: 12, // Adjust font size as needed
+                            fontWeight:
+                                FontWeight.w300, // Adjust font weight as needed
+                            color: Colors.white, // Adjust color as needed
+                          ))),
+                  SizedBox(
+                      width: screenWidth / 6,
+                      child: const Text('Confirm\nDetails',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12, // Adjust font size as needed
+                            fontWeight:
+                                FontWeight.w300, // Adjust font weight as needed
+                            color: Colors.white, // Adjust color as needed
+                          ))),
+                  SizedBox(
+                      width: screenWidth / 6,
+                      child: const Text('Order\nMaterials',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12, // Adjust font size as needed
+                            fontWeight:
+                                FontWeight.w300, // Adjust font weight as needed
+                            color: Colors.white, // Adjust color as needed
+                          ))),
+                  SizedBox(
+                      width: screenWidth / 6,
+                      child: const Text('Label\nItems',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12, // Adjust font size as needed
+                            fontWeight:
+                                FontWeight.w300, // Adjust font weight as needed
+                            color: Colors.white, // Adjust color as needed
+                          ))),
+                  SizedBox(
+                      width: screenWidth / 6,
+                      child: const Text('Check\nIn',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12, // Adjust font size as needed
+                            fontWeight:
+                                FontWeight.w300, // Adjust font weight as needed
+                            color: Colors.white, // Adjust color as needed
+                          ))),
+                  SizedBox(
+                      width: screenWidth / 6,
+                      child: const Text('Confirm\nPick Up',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12, // Adjust font size as needed
+                            fontWeight:
+                                FontWeight.w300, // Adjust font weight as needed
+                            color: Colors.white, // Adjust color as needed
+                          ))),
+                ],
               ),
-            10.kH,
-          ],
-        ),
-      ],
+              10.kH,
+                OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      if (_currentIndex == 2 && item.length <= 0) {
+                        _showAlertDialog(context);
+                      } else {
+                        if (_currentIndex < 5) {
+                          _currentIndex = _currentIndex + 1;
+                          _pageController.animateToPage(
+                            _currentIndex,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                      }
+                    });
+                  },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    backgroundColor: Colors.white,
+                    foregroundColor: const Color.fromRGBO(1, 33, 105, 1),
+                    side: const BorderSide(color: Color.fromRGBO(1, 33, 105, 1)),
+                    padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 7.0),
+                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  child: const Text('Next Step',
+                    style: TextStyle(
+                      fontSize: 14, // Adjust font size as needed
+                      fontWeight: FontWeight.w400, // Adjust font weight as needed
+                      color: Colors.black, // Adjust color as needed
+                    ),
+                  ),
+                ),
+              10.kH,
+            ],
+          ),
+        ],
+      )
     );
   }
 

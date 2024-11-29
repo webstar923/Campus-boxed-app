@@ -11,8 +11,10 @@ class ApiConstants {
   static String resetPassword = '/reset-password';
   static String banner = '/banner';
   static String userDetails = '/user-details';
+  static String reservationDetails = '/reservation-details';
   static String packagingWrapper = '/packaging-wrapper';
   static String reservations = '/reservations';
+  static String registerNotificationUser = '/notifications';
   static String addWorkersServicesEndpoint = 'admin/save';
   static String deleteWorkersServicesEndpoint = 'admin/delete';
   static String fetchWorkersServicesEndpoint = 'admin/fetch';

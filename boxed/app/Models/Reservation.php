@@ -22,16 +22,35 @@ class Reservation extends Model
     }
 
     public function getPickupTimeAttribute($value) {
-        return Carbon::parse($value)->format('M d y, h:i a');
+        // return Carbon::parse($value)->format('M d y, h:i a');
+        return Carbon::parse($value)->toIso8601String();
     }
     
     public function getDropoffTimeAttribute($value) {
-        return Carbon::parse($value)->format('M d y, h:i a');
+        // return Carbon::parse($value)->format('M d y, h:i a');
+        return Carbon::parse($value)->toIso8601String();
     }
 
-    public function getStatusBadgeAttribute($value) {
+    // public function getStatusBadgeAttribute($value) {
+    //     $statuses = ['Awaiting Pickup', 'Picked Up'];
+    //     $value--;
+    //     return "<span class='badge badge-info'>$statuses[$value]</span>";
+    // }
+    
+    public function getStatusBadgeAttribute() {
+        // Define possible statuses
         $statuses = ['Awaiting Pickup', 'Picked Up'];
-        $value--;
-        return "<span class='badge badge-info'>$statuses[$value]</span>";
+    
+        // Assume `status` is a field in your database; adjust if necessary.
+        $statusIndex = $this->attributes['status'] ?? null;
+    
+        // Ensure $statusIndex is valid and within range.
+        if (is_null($statusIndex) || !isset($statuses[$statusIndex])) {
+            return "<span class='badge badge-danger'>Unknown Status</span>";
+        }
+    
+        // Return the badge HTML.
+        return "<span class='badge badge-info'>{$statuses[$statusIndex]}</span>";
     }
+    
 }

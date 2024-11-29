@@ -4,11 +4,21 @@ import 'package:boxed_project/http/api_constant.dart';
 import 'package:boxed_project/http/handle_request.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final storage = FlutterSecureStorage();
 
 class ApiService {
   final BuildContext context;
 
   ApiService(this.context);
+
+  Future<String?> getToken() async {
+    String? token = await storage.read(key: 'access_token');
+    if (token != null) {
+      return token;
+    }
+  }
 
   Future<void> userLogin(String email, String password, ResponseCallback callback) async {
     var url = '${ApiConstants.baseUrl}${ApiConstants.userLogin}';
@@ -107,6 +117,12 @@ class ApiService {
     await HandleRequest(context).handleRequest('GET', url, token, true, body: {}, callback: callback);
   }
 
+  Future<void> getReservationDetails(ResponseCallback callback) async {
+    var url = '${ApiConstants.baseUrl}${ApiConstants.reservationDetails}';
+    var token = await getToken();
+    await HandleRequest(context).handleRequest('GET', url, token!, true, body: {}, callback: callback);
+  }
+    
   Future<void> reservationInfomationUpdate(
   BuildContext context,
   Map<String, dynamic> payload,

@@ -123,7 +123,7 @@ class CustomCheckButton extends StatefulWidget {
 }
 
 class _CustomCheckButtonState extends State<CustomCheckButton> {
-  bool? check = false;
+  bool? check = true;
   @override
   Widget build(BuildContext context) {
     return CustomIconButton(
@@ -133,7 +133,7 @@ class _CustomCheckButtonState extends State<CustomCheckButton> {
         value: check,
         onChanged: (bool? value) {
           setState(() {
-            check = value;
+            // check = value;
           });
         },
       ),

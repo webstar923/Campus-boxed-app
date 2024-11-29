@@ -55,9 +55,18 @@ class _LoginScreenState extends State<LoginScreen> {
           final storage = FlutterSecureStorage();
           await storage.write(key: 'access_token', value: loggedInUser.token);
           await storage.write(key: 'customer_id', value: loggedInUser.customerId);
+          await storage.write(key: 'reservation_exist', value: loggedInUser.reservationExist);
           // String? token = await storage.read(key: 'access_token');
           // Save the user data if needed in the AuthProvider or elsewhere
-          Go.named(context, RouteName.reserveNowScreen);
+          if(loggedInUser.reservationExist == 'false')
+          {
+            Go.named(context, RouteName.reserveNowScreen);
+          }
+          else
+          {
+            Go.named(context, RouteName.reserveDetailScreen);
+          }
+          
         }
       } catch (error) {
         setState(() {
