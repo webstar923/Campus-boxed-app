@@ -7,7 +7,7 @@ use Response;
 
 trait ApiResponsesTrait
 {
-    public function success($data = [], $message = 'data found successfully', $code = 200) : JsonResponse {
+    public function success($data = [], $message = 'Data found successfully', $code = 200) : JsonResponse {
 
         $response = [
             'data' => $data,

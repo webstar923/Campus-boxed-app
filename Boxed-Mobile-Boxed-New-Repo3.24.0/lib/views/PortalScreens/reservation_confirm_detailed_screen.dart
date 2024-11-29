@@ -11,6 +11,7 @@ import 'package:boxed_project/theme/font_structures.dart';
 import 'package:boxed_project/Utility/color_constant.dart';
 import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dart';
 import 'package:boxed_project/views/widget/customsnapbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class ReservationConfirmDetailedScreen extends StatefulWidget {
   final TextEditingController pickupDateController;
@@ -61,7 +62,9 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
           if (mounted) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               hideLoadingDialog(context);
-              CustomSnackBar.show(context, message);
+              toast(message);
+              // CustomSnackBar.show(context, message);
+              
               // ScaffoldMessenger.of(context).showSnackBar(
               //   SnackBar(
               //     content: Text(
@@ -125,7 +128,9 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
               hideLoadingDialog(context);
-              CustomSnackBar.show(context, message);
+              toast(message);
+              // CustomSnackBar.show(context, message);
+
               // ScaffoldMessenger.of(context).showSnackBar(
               //   SnackBar(
               //     content: Text(
@@ -143,7 +148,8 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             hideLoadingDialog(context);
-            CustomSnackBar.show(context, 'An error occurred: $e');
+            toast('An error occurred: $e');
+            // CustomSnackBar.show(context, 'An error occurred: $e');
             // ScaffoldMessenger.of(context).showSnackBar(
             //   SnackBar(
             //     content: Text(
@@ -474,6 +480,15 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
         ),
       ),
     );
+  }
+
+  void toast(String message) {
+    Flushbar(
+      message: message,
+      duration: Duration(seconds: 3),
+      backgroundColor: Colors.blue,
+      flushbarPosition: FlushbarPosition.TOP,
+    ).show(context);
   }
 
 }

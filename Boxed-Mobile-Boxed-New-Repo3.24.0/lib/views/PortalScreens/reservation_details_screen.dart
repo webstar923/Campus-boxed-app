@@ -35,6 +35,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
   final TextEditingController dropDateController = TextEditingController(); 
   final TextEditingController pickupLocationController = TextEditingController();
   final TextEditingController deliveryLocationController = TextEditingController();
+  final List<String> stepList =['Reserve', 'Confirm Details', 'Order Materials', 'Label Items', 'Check In', 'Confirm Pick Up'];
 
   // Function to save Detail Data to Server
   Future<bool> saveDetailData() async {
@@ -117,6 +118,22 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                       'assets/images/boxed_logo.png',
                       height: 67,
                       width: 212,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0), // Adjust padding as needed
+                    child: Text(
+                      "<"+stepList[_currentIndex]+">",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white,
+                        decoration: TextDecoration.none
+                      ),
                     ),
                   ),
                 ),

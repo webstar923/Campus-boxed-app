@@ -66,6 +66,7 @@ dependencies:
   flutter_stripe: ^10.2.0
   flutter_stripe_web: ^5.1.0
   flutter_secure_storage: ^9.2.2
+  another_flushbar: ^1.10.30
 dev_dependencies:
   flutter_test:
     sdk: flutter
