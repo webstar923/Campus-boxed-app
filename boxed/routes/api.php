@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('/user-details', [ApiController::class, 'getUserDetails']);
     Route::get('/reservation-details', [ApiController::class, 'getReservationDetails']);
     Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::PUT('/reservations', [ReservationController::class, 'update']);
 });
 
 Route::get('/storage-boxes', [ApiController::class, 'getStorageBoxes']);

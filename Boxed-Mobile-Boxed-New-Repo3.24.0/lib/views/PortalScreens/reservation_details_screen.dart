@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:boxed_project/Utility/common.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,11 @@ import 'package:boxed_project/views/PortalScreens/order_material_screen.dart';
 import 'package:boxed_project/views/PortalScreens/reservation_detail_slider.dart';
 import 'package:boxed_project/route_structure/go_navigator.dart';
 import 'package:boxed_project/route_structure/go_router.dart';
+import 'package:boxed_project/http/api_constant.dart';
+import 'package:boxed_project/http/api_client.dart';
+import 'package:boxed_project/widgets/custom_button.dart';
+import 'package:boxed_project/theme/colors.dart';
+import 'package:boxed_project/theme/font_structures.dart';
 
 class ReservationDetailScreen extends StatefulWidget {
   const ReservationDetailScreen({super.key});
@@ -25,6 +31,33 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
   final item = Common.selectedMaterials;
+  final TextEditingController pickupDateController = TextEditingController();
+  final TextEditingController dropDateController = TextEditingController(); 
+  final TextEditingController pickupLocationController = TextEditingController();
+  final TextEditingController deliveryLocationController = TextEditingController();
+
+  // Function to save Detail Data to Server
+  Future<bool> saveDetailData() async {
+    final url  = '${ApiConstants.baseUrl}${ApiConstants.reservations}';
+    final body = jsonEncode({
+        "pickup_time": pickupDateController.text,
+        "dropoff_time": dropDateController.text,
+        "pickup_location": pickupLocationController.text,
+        "delivery_location" : deliveryLocationController.text
+      });
+    final response = await makeAuthenticatedRequest(url, 'PUT', body: body);
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      if (responseData['success']) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      final responseData = jsonDecode(response.body);
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,14 +126,25 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
           Expanded(
             child: PageView(
               controller: _pageController,
-              onPageChanged: (index) {
+              onPageChanged: (index) async {
+                if( _currentIndex == 2 ){
+                  await saveDetailData();
+                  // print(result);
+                  // index = result ? index: 2;
+                }
                 setState(() {
                   _currentIndex = index;
                 });
               },
-              children: const [
+              children: [
                 Center(child: ReservationDetailSlider()),
-                Center(child: ReservationConfirmDetailedScreen()),
+                Center(child: ReservationConfirmDetailedScreen(
+                  pickupDateController:pickupDateController,
+                  dropDateController:dropDateController,
+                  pickupLocationController:pickupLocationController,
+                  deliveryLocationController:deliveryLocationController,
+                  )
+                ),
                 Center(child: OrderMaterialScreen()),
                 Center(child: LabelItemScreen()),
                 Center(child: PickupView()),
@@ -108,9 +152,18 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
               ],
             ),
           ),
-          Column(
-            children: [
-              Padding(
+          Container(
+            // color: Color.fromARGB(200, 255, 192, 203),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [ColorConstants.primaryColor, const Color.fromARGB(255, 12, 64, 187), ColorConstants.primaryColor],  // Gradient colors
+                begin: Alignment.bottomCenter,              // Start point
+                end: Alignment.topCenter,            // End point
+              ),
+            ),
+            child:Column(
+              children: [
+                Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
                     children: [
@@ -128,112 +181,194 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                       buildStepIndicator(4 < _currentIndex, 'Confirm Pick Up', 5),
                     ],
                   )),
-              // Added space between indicators and labels
+                // Added space between indicators and labels
 
-              Row(
-                children: [
-                  SizedBox(
-                      width: screenWidth / 6,
-                      child: const Text('Reserve',
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                          style: TextStyle(
-                            fontSize: 12, // Adjust font size as needed
-                            fontWeight:
-                                FontWeight.w300, // Adjust font weight as needed
-                            color: Colors.white, // Adjust color as needed
-                          ))),
-                  SizedBox(
-                      width: screenWidth / 6,
-                      child: const Text('Confirm\nDetails',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12, // Adjust font size as needed
-                            fontWeight:
-                                FontWeight.w300, // Adjust font weight as needed
-                            color: Colors.white, // Adjust color as needed
-                          ))),
-                  SizedBox(
-                      width: screenWidth / 6,
-                      child: const Text('Order\nMaterials',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12, // Adjust font size as needed
-                            fontWeight:
-                                FontWeight.w300, // Adjust font weight as needed
-                            color: Colors.white, // Adjust color as needed
-                          ))),
-                  SizedBox(
-                      width: screenWidth / 6,
-                      child: const Text('Label\nItems',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12, // Adjust font size as needed
-                            fontWeight:
-                                FontWeight.w300, // Adjust font weight as needed
-                            color: Colors.white, // Adjust color as needed
-                          ))),
-                  SizedBox(
-                      width: screenWidth / 6,
-                      child: const Text('Check\nIn',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12, // Adjust font size as needed
-                            fontWeight:
-                                FontWeight.w300, // Adjust font weight as needed
-                            color: Colors.white, // Adjust color as needed
-                          ))),
-                  SizedBox(
-                      width: screenWidth / 6,
-                      child: const Text('Confirm\nPick Up',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12, // Adjust font size as needed
-                            fontWeight:
-                                FontWeight.w300, // Adjust font weight as needed
-                            color: Colors.white, // Adjust color as needed
-                          ))),
-                ],
-              ),
-              10.kH,
-                OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      if (_currentIndex == 2 && item.length <= 0) {
-                        _showAlertDialog(context);
-                      } else {
-                        if (_currentIndex < 5) {
-                          _currentIndex = _currentIndex + 1;
-                          _pageController.animateToPage(
-                            _currentIndex,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
+                // Row(
+                //   children: [
+                //     SizedBox(
+                //         width: screenWidth / 6,
+                //         child: const Text('Reserve',
+                //             textAlign: TextAlign.center,
+                //             softWrap: true,
+                //             style: TextStyle(
+                //               fontSize: 12, // Adjust font size as needed
+                //               fontWeight:
+                //                   FontWeight.w300, // Adjust font weight as needed
+                //               color: Colors.white, // Adjust color as needed
+                //             ))),
+                //     SizedBox(
+                //         width: screenWidth / 6,
+                //         child: const Text('Confirm\nDetails',
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(
+                //               fontSize: 12, // Adjust font size as needed
+                //               fontWeight:
+                //                   FontWeight.w300, // Adjust font weight as needed
+                //               color: Colors.white, // Adjust color as needed
+                //             ))),
+                //     SizedBox(
+                //         width: screenWidth / 6,
+                //         child: const Text('Order\nMaterials',
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(
+                //               fontSize: 12, // Adjust font size as needed
+                //               fontWeight:
+                //                   FontWeight.w300, // Adjust font weight as needed
+                //               color: Colors.white, // Adjust color as needed
+                //             ))),
+                //     SizedBox(
+                //         width: screenWidth / 6,
+                //         child: const Text('Label\nItems',
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(
+                //               fontSize: 12, // Adjust font size as needed
+                //               fontWeight:
+                //                   FontWeight.w300, // Adjust font weight as needed
+                //               color: Colors.white, // Adjust color as needed
+                //             ))),
+                //     SizedBox(
+                //         width: screenWidth / 6,
+                //         child: const Text('Check\nIn',
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(
+                //               fontSize: 12, // Adjust font size as needed
+                //               fontWeight:
+                //                   FontWeight.w300, // Adjust font weight as needed
+                //               color: Colors.white, // Adjust color as needed
+                //             ))),
+                //     SizedBox(
+                //         width: screenWidth / 6,
+                //         child: const Text('Confirm\nPick Up',
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(
+                //               fontSize: 12, // Adjust font size as needed
+                //               fontWeight:
+                //                   FontWeight.w300, // Adjust font weight as needed
+                //               color: Colors.white, // Adjust color as needed
+                //             ))),
+                //   ],
+                // ),
+                // 10.kH,
+                //   OutlinedButton(
+                //     onPressed: () {
+                //       setState(() {
+                //         if (_currentIndex == 2 && item.length <= 0) {
+                //           _showAlertDialog(context);
+                //         } else {
+                //           if (_currentIndex < 5) {
+                //             _currentIndex = _currentIndex + 1;
+                //             _pageController.animateToPage(
+                //               _currentIndex,
+                //               duration: const Duration(milliseconds: 300),
+                //               curve: Curves.easeInOut,
+                //             );
+                //           }
+                //         }
+                //       });
+                //     },
+                //     style: OutlinedButton.styleFrom(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(4.0),
+                //       ),
+                //       backgroundColor: Colors.white,
+                //       foregroundColor: const Color.fromRGBO(1, 33, 105, 1),
+                //       side: const BorderSide(color: Color.fromRGBO(1, 33, 105, 1)),
+                //       padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 7.0),
+                //       textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                //     ),
+                //     child: const Text('Next Step',
+                //       style: TextStyle(
+                //         fontSize: 14, // Adjust font size as needed
+                //         fontWeight: FontWeight.w400, // Adjust font weight as needed
+                //         color: Colors.black, // Adjust color as needed
+                //       ),
+                //     ),
+                //   ),
+                // Padding(padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 16),
+                //   child: CustomButton(
+                //     onTap: () => {
+                //       setState(() {
+                //         if (_currentIndex == 2 && item.length <= 0) {
+                //           _showAlertDialog(context);
+                //         } else {
+                //           if (_currentIndex < 5) {
+                //             _currentIndex = _currentIndex + 1;
+                //             _pageController.animateToPage(
+                //               _currentIndex,
+                //               duration: const Duration(milliseconds: 300),
+                //               curve: Curves.easeInOut,
+                //             );
+                //           }
+                //         }
+                //       })
+                //     },
+                //     height: 55,
+                //     borderRadius: BorderRadius.circular(10),
+                //     child: const Text(
+                //       "NEXT STEP",
+                //       style: TextStyle(
+                //         color: themewhitecolor,
+                //         fontSize: mediumfontsize3,
+                //         fontWeight: boldfontweight,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  child: GestureDetector(
+                    onTap: () => {
+                      setState(() {
+                        if (_currentIndex == 2 && item.length <= 0) {
+                          _showAlertDialog(context);
+                        } else {
+                          if (_currentIndex < 5) {
+                            _currentIndex = _currentIndex + 1;
+                            _pageController.animateToPage(
+                              _currentIndex,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
                         }
-                      }
-                    });
-                  },
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color.fromRGBO(1, 33, 105, 1),
-                    side: const BorderSide(color: Color.fromRGBO(1, 33, 105, 1)),
-                    padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 7.0),
-                    textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  child: const Text('Next Step',
-                    style: TextStyle(
-                      fontSize: 14, // Adjust font size as needed
-                      fontWeight: FontWeight.w400, // Adjust font weight as needed
-                      color: Colors.black, // Adjust color as needed
+                      })
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF004BA0), // Button color
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.white,
+                          width: 2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "NEXT STEP",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            decoration: TextDecoration.none
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              10.kH,
-            ],
-          ),
+                10.kH,
+              ],
+            ),
+          )
+          
         ],
       )
     );

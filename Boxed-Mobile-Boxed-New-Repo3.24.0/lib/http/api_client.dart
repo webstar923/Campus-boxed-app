@@ -17,10 +17,16 @@ Future<http.Response> makeAuthenticatedRequest(String url, String method, {Map<S
       headers: headers,
       body: body,
     );
-  } else {
+  } else if(method.toUpperCase() == 'GET') {
     return await http.get(
       Uri.parse(url),
       headers: headers,
     );
+  } else {
+    return await http.put(
+      Uri.parse(url),
+      headers: headers,
+      body: body
+    );    
   }
 }

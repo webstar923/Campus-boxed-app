@@ -20,6 +20,7 @@ trait PaymentTrait
                 'amount' => $input['amount'] * 100, // cents
                 'currency' => 'usd',
                 'payment_method' => $input['payment_method_id'],
+                'confirm' => true,
                 'automatic_payment_methods' => [
                     'enabled' => true,
                     'allow_redirects' => 'never',
@@ -88,3 +89,20 @@ trait PaymentTrait
     //     }
     // }
 }
+
+
+
+// amount: totalPaidAmount,
+//           currency: "usd",
+//           customer: stripeId,
+//           payment_method: paymentMethod,
+//           confirm: true, // Automatically confirm the payment
+//           automatic_payment_methods: {
+//             enabled: true,
+//             allow_redirects: "never",
+//           },
+//           metadata: {
+//             userIds: `${item.userIds}`,
+//             adminId: adminId || "",
+//             product: item.name,
+//           },

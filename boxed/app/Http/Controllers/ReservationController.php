@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\{Reservation, PackagingWrapper};
 use App\Traits\{ApiResponsesTrait, PaymentTrait};
 use Auth;
+use Carbon\Carbon;
 
 class ReservationController extends Controller
 {
@@ -47,6 +48,24 @@ class ReservationController extends Controller
         {
             return $this->error('A reservation already exists');
         }
+    }
+
+    public function update(Request $request) {
+        $reservationInput['user_id'] = Auth::user()->id;
+        $reservation = Reservation::where('user_id', $reservationInput['user_id'])
+        ->where('status', '!=', 7)
+        ->first();
+        $pickup = Carbon::createFromFormat('m/d/Y', $request['pickup_time']);
+        $dropoff = Carbon::createFromFormat('m/d/Y', $request['dropoff_time']);
+        $formattedPickupDate = $pickup->format('Y-m-d');
+        $formattedDropoffDate = $dropoff->format('Y-m-d');
+        $reservation->update([
+            'pickup_time' => $formattedPickupDate,
+            'dropoff_time' => $formattedDropoffDate,
+            'pickup_location' => $request['pickup_location'],
+            'delivery_location' => $request['delivery_location'],
+        ]);
+        return $this->success('Update Success');
     }
 
     // public function store(Request $request) {

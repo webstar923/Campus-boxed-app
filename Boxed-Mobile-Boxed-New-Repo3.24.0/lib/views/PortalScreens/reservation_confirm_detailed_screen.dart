@@ -13,18 +13,26 @@ import 'package:boxed_project/views/PortalScreens/reservation_details_screen.dar
 import 'package:boxed_project/views/widget/customsnapbar.dart';
 
 class ReservationConfirmDetailedScreen extends StatefulWidget {
-  const ReservationConfirmDetailedScreen({super.key});
+  final TextEditingController pickupDateController;
+  final TextEditingController dropDateController;
+  final TextEditingController pickupLocationController;
+  final TextEditingController deliveryLocationController;
 
+  const ReservationConfirmDetailedScreen({
+    Key? key,
+    required this.pickupDateController,
+    required this.dropDateController,
+    required this.pickupLocationController,
+    required this.deliveryLocationController,
+  }) : super(key: key);
+  
   @override
-  State<ReservationConfirmDetailedScreen> createState() => _ReservationConfirmDetailedScreenState();
+  _ReservationConfirmDetailedScreenState createState() =>
+      _ReservationConfirmDetailedScreenState();
 }
 
 class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDetailedScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _pickupDateController = TextEditingController();
-  final _dropDateController = TextEditingController();
-  final _pickupLocationController = TextEditingController();
-  final _deliveryLocationController = TextEditingController();
+  final _formKey1 = GlobalKey<FormState>();
   final _customLocationController = TextEditingController();
   String? selectedLocation;
   String? selectedApartment;
@@ -97,20 +105,20 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
               DateTime parsedPickupTime = DateTime.parse(pickupTime);
               String formattedPickupTime =
                   "${parsedPickupTime.month}/${parsedPickupTime.day}/${parsedPickupTime.year}";
-              _pickupDateController.text = formattedPickupTime;
+              widget.pickupDateController.text = formattedPickupTime;
 
               // Parse drop-off time
               DateTime parsedDropoffTime = DateTime.parse(dropoffTime);
               String formattedDropoffTime =
                   "${parsedDropoffTime.month}/${parsedDropoffTime.day}/${parsedDropoffTime.year}";
-              _dropDateController.text = formattedDropoffTime;
+              widget.dropDateController.text = formattedDropoffTime;
             } catch (e) {
               print("Error parsing dates: $e");
-              _pickupDateController.text = "Invalid date";
-              _dropDateController.text = "Invalid date";
+              widget.pickupDateController.text = "Invalid date";
+              widget.dropDateController.text = "Invalid date";
             }
-            _pickupLocationController.text   = pickupLocation;
-            _deliveryLocationController.text = deliveryLocation;
+            widget.pickupLocationController.text   = pickupLocation;
+            widget.deliveryLocationController.text = deliveryLocation;
 
           });
 
@@ -164,8 +172,8 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
 
   @override
   void dispose() {
-    _pickupDateController.dispose();
-    _dropDateController.dispose();
+    widget.pickupDateController.dispose();
+    widget.dropDateController.dispose();
     _customLocationController.dispose();
     super.dispose();
   }
@@ -183,7 +191,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                   child: Form(
-                    key: _formKey,
+                    key: _formKey1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -197,7 +205,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                         ),
                         8.kH,
                         TextFormField(
-                          controller: _pickupDateController,
+                          controller: widget.pickupDateController,
                           // keyboardType: TextInputType.datetime,
                           decoration: const InputDecoration(
                             hintText: 'Select Pickup Date',
@@ -221,7 +229,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                               String formattedDate =
                                   "${pickedDate.month}/${pickedDate.day}/${pickedDate.year}";
                               setState(() {
-                                _pickupDateController.text = formattedDate; // Set the formatted date
+                                widget.pickupDateController.text = formattedDate; // Set the formatted date
                               });
                             }
                           },
@@ -242,7 +250,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                         ),
                         8.kH,
                         TextFormField(
-                          controller: _dropDateController,
+                          controller: widget.dropDateController,
                           // keyboardType: TextInputType.datetime,
                           decoration: const InputDecoration(
                             hintText: 'Select Drop Date',
@@ -266,7 +274,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                               String formattedDate =
                                   "${dropDate.month}/${dropDate.day}/${dropDate.year}";
                               setState(() {
-                                _dropDateController.text = formattedDate; // Set the formatted date
+                                widget.dropDateController.text = formattedDate; // Set the formatted date
                               });
                             }
                           },
@@ -287,7 +295,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                         ),
                         8.kH,
                         TextFormField(
-                          controller: _pickupLocationController,
+                          controller: widget.pickupLocationController,
                           decoration: customInputDecoration('your location'),
                           // onChanged: (value) => _reservation.cardEmail = value,
                           validator: (value) => value!.isEmpty ? "Enter your location" : null,
@@ -343,7 +351,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                         ),
                         8.kH,
                         TextFormField(
-                          controller: _deliveryLocationController,
+                          controller: widget.deliveryLocationController,
                           decoration: customInputDecoration('delivery location'),
                           // onChanged: (value) => _reservation.cardEmail = value,
                           validator: (value) => value!.isEmpty ? "Enter deliver location" : null,
@@ -411,7 +419,7 @@ class _ReservationConfirmDetailedScreenState extends State<ReservationConfirmDet
                         //   width: double.infinity,
                         //   child: ElevatedButton(
                         //     onPressed: () {
-                        //       if (_formKey.currentState?.validate() ?? false) {
+                        //       if (_formKey1.currentState?.validate() ?? false) {
                         //         Navigator.push(
                         //           context,
                         //           MaterialPageRoute(
