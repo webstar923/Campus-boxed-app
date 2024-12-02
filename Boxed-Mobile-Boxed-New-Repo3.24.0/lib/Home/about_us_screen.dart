@@ -102,7 +102,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                                     context,
                                     MaterialPageRoute(
                                         // builder: (context) => const ReservationScreen()),
-                                        builder: (context) => const ReservationConfirmDetailedScreen()),
+                                        builder: (context) => ReservationConfirmDetailedScreen(pickupDateController: TextEditingController(), pickupLocationController: TextEditingController(), dropDateController: TextEditingController(), deliveryLocationController: TextEditingController(),)),
 
                                   );
                               },

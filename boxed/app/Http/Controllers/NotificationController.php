@@ -41,10 +41,15 @@ class NotificationController extends Controller
             try {
                 // Send email
                 Mail::raw('Your requested reminder is ready!', function ($message) use ($notification) {
-                    $message->to('secretstart1117@hotmail.com')
-                            ->subject('Reminder Notification')
-                            ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+                    if (!empty($notification->email)) {
+                        $message->to($notification->email)
+                                ->subject('Reminder Notification')
+                                ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+                    } else {
+                        \Log::warning('No email address provided for notification');
+                    }
                 });
+                
 
                 // Send SMS if applicable
                 if (!empty($notification->phone_number)) {
